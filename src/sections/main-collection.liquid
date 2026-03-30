@@ -1,0 +1,34 @@
+<section class="main-collection py-12 md:py-16">
+  <div class="container">
+    <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ category.name }}</h1>
+    {% if category.description != blank %}
+      <p class="collection-description mt-3 max-w-3xl text-base leading-7 text-[var(--color-text-light)]">{{ category.description }}</p>
+    {% endif %}
+    {% products category_id: category.id, page: current_page, limit: section.settings.products_per_page, include_products_from_subcategories: true %}
+      <div class="product-grid mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
+        {% for product in products %}
+          {% render 'product-card', product: product %}
+        {% endfor %}
+      </div>
+      {% if paginate.pages > 1 %}
+        <nav class="pagination">
+          {{ paginate | default_pagination }}
+        </nav>
+      {% endif %}
+    {% endproducts %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Coleccion principal",
+  "settings": [
+    {
+      "type": "number",
+      "id": "products_per_page",
+      "label": "Productos por pagina",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

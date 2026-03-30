@@ -1,0 +1,15 @@
+<section class="main-page py-12 md:py-16">
+  <div class="container">
+    <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ page.title }}</h1>
+    <div class="rte mt-6 max-w-none">
+      {% render 'content-blocks', content: page.content %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pagina principal",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "main-search_glrq3y": {
+      "type": "main-search",
+      "settings": {
+        "title": "Buscar",
+        "results_per_page": 12
+      }
+    }
+  },
+  "order": [
+    "main-page",
+    "main-search_glrq3y"
+  ]
+}

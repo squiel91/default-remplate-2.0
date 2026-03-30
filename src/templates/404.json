@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "not-found": {
+      "type": "not-found",
+      "settings": {
+        "heading": "Pagina no encontrada",
+        "text": "Lo sentimos, no pudimos encontrar la pagina que buscas.",
+        "cta_text": "Volver al inicio"
+      }
+    }
+  },
+  "order": ["not-found"]
+}

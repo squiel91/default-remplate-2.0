@@ -1,0 +1,172 @@
+<section class="main-product" data-currency-code="{{ store.currency.code | default: 'UYU' | escape_attr }}">
+  <div class="container">
+    <article id="product" class="product-page" aria-live="polite">
+      <div class="product-detail">
+        <div class="product-gallery">
+          <div class="tiendu-carousel" id="product-gallery" data-product-gallery>
+            <div class="tiendu-carousel__stage">
+              <div class="tiendu-carousel__viewport" data-role="viewport" data-dragging="false">
+                <div class="tiendu-carousel__track" data-role="track">
+                  {% for image in product_page.gallery_images %}
+                    <div class="tiendu-carousel__slide" data-product-gallery-slide{% if image.id != blank %} data-image-id="{{ image.id }}"{% endif %}>
+                      <img src="{{ image.url | escape_attr }}" alt="{{ image.alt | default: product.title | escape_attr }}" {% if forloop.first %}fetchpriority="high" loading="eager"{% else %}loading="lazy"{% endif %}>
+                    </div>
+                  {% endfor %}
+                </div>
+                <button class="tiendu-carousel__open" type="button" data-role="open-lightbox" aria-label="Ampliar imagen">
+                  <span class="tiendu-carousel__open-indicator tiendu-carousel__action-surface" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                  </span>
+                </button>
+              </div>
+              <button class="tiendu-carousel__nav tiendu-carousel__nav--prev" type="button" data-role="prev-image" aria-label="Imagen anterior"{% if product_page.gallery_images.size <= 1 %} hidden{% endif %}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+              </button>
+              <button class="tiendu-carousel__nav tiendu-carousel__nav--next" type="button" data-role="next-image" aria-label="Imagen siguiente"{% if product_page.gallery_images.size <= 1 %} hidden{% endif %}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </button>
+            </div>
+
+            <div class="tiendu-carousel__thumbs" data-role="thumbs" aria-label="Selector de imagenes"{% if product_page.gallery_images.size <= 1 %} hidden{% endif %}>
+              {% for image in product_page.gallery_images %}
+                <button class="tiendu-carousel__thumb" type="button" data-thumb-index="{{ forloop.index0 }}"{% if image.id != blank %} data-image-id="{{ image.id }}"{% endif %} aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Ver imagen {{ forloop.index }}">
+                  <img src="{{ image.url | escape_attr }}" alt="{{ image.alt | default: product.title | escape_attr }}" loading="lazy">
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="tiendu-lightbox" id="product-gallery-lightbox" data-product-gallery-lightbox hidden>
+            <div class="tiendu-lightbox__backdrop" data-role="backdrop"></div>
+            <div class="tiendu-lightbox__content" data-role="content">
+              <button class="tiendu-lightbox__close" type="button" data-role="close-lightbox" aria-label="Cerrar imagen ampliada">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 6-12 12"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+              <img class="tiendu-lightbox__image" src="{{ product_page.gallery_images.first.url | escape_attr }}" alt="{{ product_page.gallery_images.first.alt | default: product.title | escape_attr }}" loading="eager" data-role="lightbox-image">
+            </div>
+          </div>
+        </div>
+
+        <div class="product-info">
+          <div class="product-info__header">
+            <h1 class="product-info__title">{{ product.title | escape }}</h1>
+          </div>
+
+          <div class="product-price-line"{% if product_page.price.price_in_cents == blank %} hidden{% endif %}>
+            <span class="product-price" id="product-price">{% if product_page.price.price_is_from %}Desde {% endif %}{{ product_page.price.price_in_cents | money }}</span>
+            <span class="product-compare" id="product-compare"{% if product_page.price.compare_at_price_in_cents == blank %} hidden{% endif %}>{% if product_page.price.compare_is_from %}Desde {% endif %}{{ product_page.price.compare_at_price_in_cents | money }}</span>
+          </div>
+
+          <div id="variant-selector" class="variant-selector">
+            {% for attribute in product.attributes %}
+              {% assign selected_value_id = blank %}
+              {% assign selected_value_label = 'Selecciona una opción' %}
+              {% assign selected_value_color = blank %}
+              {% assign selected_value_image_url = blank %}
+              {% assign has_selected_value = false %}
+              {% assign attribute_id_str = attribute.id | append: '' %}
+              {% for selected_attribute in product_page.default_attribute_values %}
+                {% assign selected_attribute_id_str = selected_attribute.attribute_id | append: '' %}
+                {% if selected_attribute_id_str == attribute_id_str %}
+                  {% assign selected_value_id = selected_attribute.value_id %}
+                  {% assign has_selected_value = true %}
+                {% endif %}
+              {% endfor %}
+              {% if attribute.displayType == 'dropdown' %}
+                {% for value in attribute.values %}
+                  {% assign selected_value_id_str = selected_value_id | append: '' %}
+                  {% assign value_id_str = value.id | append: '' %}
+                  {% if has_selected_value and selected_value_id_str == value_id_str %}
+                    {% assign selected_value_label = value.value %}
+                    {% assign selected_value_color = value.color %}
+                    {% if value.image != blank and value.image.url != blank %}
+                      {% assign selected_value_image_url = value.image.url %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+                <fieldset class="variant-group variant-group--dropdown">
+                  <legend>{{ attribute.name | escape }}</legend>
+                  <div class="variant-select" data-attribute-id="{{ attribute.id }}">
+                    <button class="variant-select__trigger" type="button" data-variant-select-trigger aria-haspopup="listbox" aria-expanded="false" aria-label="{{ attribute.name | escape_attr }}">
+                      <span class="variant-select__trigger-swatch{% if has_selected_value == false or selected_value_image_url == blank and selected_value_color == blank %} variant-select__trigger-swatch--hidden{% endif %}" data-variant-select-trigger-swatch aria-hidden="true">
+                        {% if has_selected_value and selected_value_image_url != blank %}
+                          <span class="variant-select__swatch variant-select__swatch--image"><img src="{{ selected_value_image_url | escape_attr }}" alt="" loading="lazy"></span>
+                        {% elsif has_selected_value and selected_value_color != blank %}
+                          <span class="variant-select__swatch variant-select__swatch--color" style="background: {{ selected_value_color | escape_attr }};"></span>
+                        {% endif %}
+                      </span>
+                      <span class="variant-select__label{% if has_selected_value == false %} variant-select__label--placeholder{% endif %}" data-variant-select-label>{{ selected_value_label | escape }}</span>
+                      <svg class="variant-select__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
+                    <div class="variant-select__menu" data-variant-select-menu role="listbox" hidden>
+                      {% for value in attribute.values %}
+                        <button class="variant-select__option" type="button" data-value-id="{{ value.id }}" data-label="{{ value.value | escape_attr }}"{% if value.color != blank %} data-color="{{ value.color | escape_attr }}"{% endif %}{% if value.image != blank and value.image.url != blank %} data-image-url="{{ value.image.url | escape_attr }}"{% endif %} aria-selected="{% if selected_value_id == value.id %}true{% else %}false{% endif %}">
+                          {% if value.image != blank and value.image.url != blank %}
+                            <span class="variant-select__swatch variant-select__swatch--image"><img src="{{ value.image.url | escape_attr }}" alt="" loading="lazy"></span>
+                          {% elsif value.color != blank %}
+                            <span class="variant-select__swatch variant-select__swatch--color" style="background: {{ value.color | escape_attr }};" aria-hidden="true"></span>
+                          {% endif %}
+                          <span class="variant-select__option-label">{{ value.value | escape }}</span>
+                        </button>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </fieldset>
+              {% else %}
+                <fieldset class="variant-group" data-attribute-name="{{ attribute.name | escape_attr }}">
+                  <legend>{{ attribute.name | escape }}</legend>
+                  {% for value in attribute.values %}
+                    <button type="button" class="option-chip{% if value.image == blank and value.color == blank %} option-chip--no-swatch{% endif %}" data-attribute-id="{{ attribute.id }}" data-value-id="{{ value.id }}" aria-pressed="{% if selected_value_id == value.id %}true{% else %}false{% endif %}">
+                      {% if value.image != blank and value.image.url != blank %}
+                        <span class="option-chip__swatch option-chip__swatch--image" aria-hidden="true"><img src="{{ value.image.url | escape_attr }}" alt="" loading="lazy"></span>
+                      {% elsif value.color != blank %}
+                        <span class="option-chip__swatch option-chip__swatch--color" style="background: {{ value.color | escape_attr }};" aria-hidden="true"></span>
+                      {% endif %}
+                      <span class="option-chip__label">{{ value.value | escape }}</span>
+                    </button>
+                  {% endfor %}
+                </fieldset>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <p id="stock-note" class="product-stock-note" data-tone="{{ product_page.stock_note.tone }}">
+            <span class="product-stock-note__dot-wrap" aria-hidden="true"><span class="product-stock-note__pulse"></span><span class="product-stock-note__dot"></span></span>
+            <span class="product-stock-note__message">{{ product_page.stock_note.message }}</span>
+          </p>
+
+          <div class="product-actions">
+            <div class="product-actions__primary">
+              <div id="product-quantity-input" class="quantity-input"{% if product_page.quantity_hidden %} hidden{% endif %}>
+                <button type="button" class="quantity-input__button" data-quantity-decrease aria-label="Disminuir cantidad">-</button>
+                <input class="quantity-input__field" type="number" inputmode="numeric" min="1" value="1" {% if product_page.quantity_max != blank %}max="{{ product_page.quantity_max }}"{% endif %} {% if product_page.quantity_disabled %}disabled{% endif %} aria-label="Cantidad">
+                <button type="button" class="quantity-input__button" data-quantity-increase aria-label="Aumentar cantidad">+</button>
+              </div>
+              <button type="button" id="add-to-cart-button" class="button button--primary product-action-button" data-icon="{{ product_page.add_to_cart.icon }}" data-loading-icon="loader-2" data-loading-label="Agregando" aria-label="{{ product_page.add_to_cart.label | escape_attr }}" {% if product_page.add_to_cart.disabled %}disabled{% endif %}>
+                <span class="button__icon" aria-hidden="true">
+                  <span data-button-icon="plus"{% if product_page.add_to_cart.icon != 'plus' %} hidden{% endif %}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg></span>
+                  <span data-button-icon="message-square"{% if product_page.add_to_cart.icon != 'message-square' %} hidden{% endif %}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+                  <span data-button-icon="loader-2" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg></span>
+                </span>
+                <span class="button__label">{{ product_page.add_to_cart.label }}</span>
+              </button>
+            </div>
+          </div>
+
+          {% if product.description != blank %}
+            <div class="product-detail__description rte">{{ product.description }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+
+    <script id="product-json" type="application/json">{{ product | json }}</script>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Producto principal",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,144 @@
+<section class="hero-carousel" data-hero-carousel data-autoplay-interval="5000">
+  {% if section.blocks and section.blocks.size > 0 %}
+    <div class="tiendu-carousel tiendu-carousel--hero">
+      <div class="tiendu-carousel__stage">
+        <div class="tiendu-carousel__viewport" data-role="viewport" data-dragging="false">
+          <div class="tiendu-carousel__track" data-role="track">
+            {% for block in section.blocks %}
+              {% assign mobile_image = block.settings.mobile_image | default: block.settings.image | default: block.settings.desktop_image %}
+              {% assign desktop_image = block.settings.desktop_image | default: block.settings.image %}
+              {% assign image_alt = block.settings.image_alt | default: block.settings.title | default: shop.name %}
+
+              <article class="tiendu-carousel__slide tiendu-carousel__slide--hero" data-hero-carousel-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" {{ block.editor_attributes }}>
+                {% if mobile_image != blank or desktop_image != blank %}
+                  <picture class="tiendu-carousel__hero-media">
+                    {% if desktop_image != blank and desktop_image != mobile_image %}
+                      <source media="(min-width: 768px)" srcset="{{ desktop_image | escape_attr }}">
+                    {% endif %}
+                    <img
+                      src="{{ mobile_image | escape_attr }}"
+                      alt="{{ image_alt | escape_attr }}"
+                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                      decoding="async"
+                    >
+                  </picture>
+                {% else %}
+                  <div class="tiendu-carousel__hero-media tiendu-carousel__hero-media--empty" aria-hidden="true"></div>
+                {% endif %}
+
+                <div class="tiendu-carousel__hero-overlay"></div>
+
+                <div class="tiendu-carousel__hero-content">
+                  <div class="container">
+                    <div class="tiendu-carousel__hero-content-inner">
+                      {% if block.settings.title != blank %}
+                        {% if forloop.first %}
+                          <h1 class="tiendu-carousel__hero-title">{{ block.settings.title }}</h1>
+                        {% else %}
+                          <h2 class="tiendu-carousel__hero-title">{{ block.settings.title }}</h2>
+                        {% endif %}
+                      {% endif %}
+
+                      {% if block.settings.subtitle != blank %}
+                        <p class="tiendu-carousel__hero-subtitle">{{ block.settings.subtitle }}</p>
+                      {% endif %}
+
+                      {% if block.settings.button_text != blank and block.settings.button_url != blank %}
+                        <a href="{{ block.settings.button_url }}" class="tiendu-carousel__hero-cta inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">
+                          {{ block.settings.button_text }}
+                        </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="tiendu-carousel__hero-controls" data-role="hero-controls" aria-label="Controles del carrusel principal">
+          <button class="tiendu-carousel__nav tiendu-carousel__action-surface" type="button" data-role="prev-image" aria-label="Slide anterior"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+          </button>
+
+          <div class="tiendu-carousel__dots" data-role="dots" role="tablist" aria-label="Slides del hero"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+            {% for block in section.blocks %}
+              <button class="tiendu-carousel__dot{% if forloop.first %} is-active{% endif %}" type="button" data-dot-index="{{ forloop.index0 }}" role="tab" aria-label="Ir al slide {{ forloop.index }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+            {% endfor %}
+          </div>
+
+          <button class="tiendu-carousel__nav tiendu-carousel__action-surface" type="button" data-role="next-image" aria-label="Slide siguiente"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="hero-carousel__empty bg-slate-100 py-16 text-slate-900">
+      <div class="container text-center">
+        <h2 class="text-2xl font-semibold tracking-tight">Hero Carousel</h2>
+        <p class="mt-2 text-[var(--color-text-light)]">Agrega slides a esta seccion desde el editor.</p>
+      </div>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Hero Carousel",
+  "max_blocks": 8,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Nueva coleccion"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Subtitulo",
+          "default": "Descubre los productos destacados de la temporada."
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Texto del boton",
+          "default": "Comprar ahora"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "URL del boton",
+          "default": "/categorias/todas"
+        },
+        {
+          "type": "image",
+          "id": "image",
+          "label": "Imagen"
+        },
+        {
+          "type": "image",
+          "id": "desktop_image",
+          "label": "Imagen desktop"
+        },
+        {
+          "type": "image",
+          "id": "mobile_image",
+          "label": "Imagen mobile"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Alt de imagen"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

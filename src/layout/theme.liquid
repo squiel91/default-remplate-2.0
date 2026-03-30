@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title }}</title>
+  <link rel="icon" href="{{ 'favicon.svg' | asset_url }}" type="image/svg+xml">
+  <link rel="canonical" href="{{ canonical_url }}">
+  {{ 'layout-theme.bundle.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'layout-theme.bundle.js' | asset_url }}" defer></script>
+  <style>
+    :root {
+      --color-primary: {{ settings.color_primary | default: '#2563eb' }};
+      --color-background: {{ settings.color_background | default: '#ffffff' }};
+      --color-text: {{ settings.color_text | default: '#1a1a1a' }};
+      --color-text-light: {{ settings.color_text_light | default: '#6b7280' }};
+    }
+  </style>
+  {{ content_for_header }}
+</head>
+<body class="bg-[var(--color-background)] text-[var(--color-text)] antialiased">
+  {% section 'header' %}
+
+  <main>
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  {% if tracking_enabled %}
+    {{ meta_tracking_script }}
+    {{ meta_tracking_noscript }}
+    {{ google_tracking_script }}
+  {% endif %}
+  <script>
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.type !== 'section:update') return;
+      var el = document.querySelector('[data-section-id="' + e.data.sectionId + '"]');
+      if (!el) return;
+      el.outerHTML = e.data.html;
+      window.dispatchEvent(new CustomEvent('tiendu:section-updated', {
+        detail: { sectionId: e.data.sectionId }
+      }));
+    });
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.type !== 'theme:css-vars') return;
+      var vars = e.data.vars;
+      for (var key in vars) {
+        document.documentElement.style.setProperty(key, vars[key]);
+      }
+    });
+  </script>
+</body>
+</html>

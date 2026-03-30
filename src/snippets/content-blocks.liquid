@@ -1,0 +1,20 @@
+{% for block in content %}
+  {% case block.type %}
+    {% when 'heading' %}
+      {% if block.level == 1 %}
+        <h1>{{ block.text }}</h1>
+      {% elsif block.level == 2 %}
+        <h2>{{ block.text }}</h2>
+      {% else %}
+        <h3>{{ block.text }}</h3>
+      {% endif %}
+    {% when 'paragraph' %}
+      <p>{{ block.text }}</p>
+    {% when 'image' %}
+      <figure>
+        <img src="{{ block.image.url }}" alt="{{ block.image.alt }}" loading="lazy">
+      </figure>
+    {% when 'html' %}
+      {{ block.code }}
+  {% endcase %}
+{% endfor %}

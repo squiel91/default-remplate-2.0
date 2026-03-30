@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "main-product",
+      "settings": {}
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "title": "Tambien te puede interesar",
+        "limit": 2
+      }
+    }
+  },
+  "order": [
+    "main-product",
+    "related"
+  ]
+}

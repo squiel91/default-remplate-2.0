@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main-search": {
+      "type": "main-search",
+      "settings": {
+        "title": "Buscar",
+        "results_per_page": 12
+      }
+    }
+  },
+  "order": ["main-search"]
+}

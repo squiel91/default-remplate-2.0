@@ -1,0 +1,88 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Bienvenido a nuestra tienda vegana Ni muuu",
+        "subheading": "Explora nuestra seleccion de productos",
+        "cta_text": "Ver productos",
+        "cta_url": "/categorias"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "title": "Productos destacadoss",
+        "limit": 4
+      }
+    },
+    "categories": {
+      "type": "featured-categories",
+      "settings": {
+        "title": "Productos destacados"
+      }
+    },
+    "recent-posts": {
+      "type": "recent-posts",
+      "settings": {
+        "title": "Del blog",
+        "limit": 3
+      }
+    },
+    "main-search_6u0ys1": {
+      "type": "main-search",
+      "settings": {
+        "title": "Buscar",
+        "results_per_page": 12
+      }
+    },
+    "hero-banner_g9ejae": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Bienvenido a nuestra tienda",
+        "subheading": "Explora nuestra seleccion de productos",
+        "cta_text": "Ver productos",
+        "cta_url": "/categorias"
+      }
+    },
+    "hero-carousel_ql959f": {
+      "type": "hero-carousel",
+      "settings": {},
+      "blocks": {
+        "slide_oo4kgu": {
+          "type": "slide",
+          "settings": {
+            "title": "Nueva coleccion",
+            "subtitle": "Descubre los productos destacados de la temporada.",
+            "button_text": "Comprar ahora",
+            "button_url": "/categorias/todas",
+            "image": "http://cnd.localhost:4000/images/1773666413663-alicantequeso-webp.webp"
+          }
+        },
+        "slide_99ku1v": {
+          "type": "slide",
+          "settings": {
+            "title": "Alimento de quesooo",
+            "subtitle": "Descubre los productos destacados de la temporada.",
+            "button_text": "Comprar ahora",
+            "button_url": "/categorias/todas",
+            "image": "http://cnd.localhost:4000/images/1773666409963-protectorsolarvn-606cae15-79b9-4835-9824-f81870305581-webp.webp"
+          }
+        }
+      },
+      "block_order": [
+        "slide_oo4kgu",
+        "slide_99ku1v"
+      ]
+    }
+  },
+  "order": [
+    "hero-carousel_ql959f",
+    "hero",
+    "categories",
+    "featured-products",
+    "main-search_6u0ys1",
+    "recent-posts",
+    "hero-banner_g9ejae"
+  ]
+}

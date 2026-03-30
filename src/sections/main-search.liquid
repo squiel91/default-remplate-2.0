@@ -1,0 +1,48 @@
+<section class="main-search py-12 md:py-16">
+  <div class="container">
+    <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ section.settings.title }}</h1>
+    <form class="search-form mt-6 flex flex-col gap-3 sm:flex-row" action="/busqueda" method="get">
+      <input class="min-w-0 flex-1 rounded-full border border-slate-300 bg-white px-5 py-3 text-base outline-none transition focus:border-[var(--color-primary)]" type="search" name="q" value="{{ search_query }}" placeholder="Buscar productos..." aria-label="Buscar">
+      <button type="submit" class="inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90">Buscar</button>
+    </form>
+    {% if search_query != blank %}
+      {% products search: search_query, page: current_page, limit: section.settings.results_per_page %}
+        {% if products.size > 0 %}
+          <p class="search-count mt-4 text-sm text-[var(--color-text-light)]">{{ paginate.items }} resultado{% if paginate.items != 1 %}s{% endif %} para "{{ search_query }}"</p>
+          <div class="product-grid mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
+            {% for product in products %}
+              {% render 'product-card', product: product %}
+            {% endfor %}
+          </div>
+          {% if paginate.pages > 1 %}
+            <nav class="pagination">
+              {{ paginate | default_pagination }}
+            </nav>
+          {% endif %}
+        {% else %}
+          <p class="search-empty py-12 text-center text-base text-[var(--color-text-light)]">No encontramos resultados para "{{ search_query }}"</p>
+        {% endif %}
+      {% endproducts %}
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Busqueda",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Buscar"
+    },
+    {
+      "type": "number",
+      "id": "results_per_page",
+      "label": "Resultados por pagina",
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

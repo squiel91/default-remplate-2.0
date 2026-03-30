@@ -1,0 +1,48 @@
+<footer class="footer mt-12 border-t border-slate-200 bg-slate-50/80">
+  <div class="footer__inner container grid gap-10 py-10 md:grid-cols-3">
+    <div class="footer__brand space-y-2">
+      <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
+      {% if store.description %}
+        <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
+      {% endif %}
+    </div>
+    <div class="footer__links space-y-3">
+      <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Paginas</h4>
+      {% pages %}
+        <ul class="space-y-2 text-sm text-[var(--color-text-light)]">
+          {% for p in pages %}
+            <li><a href="{{ p.url }}">{{ p.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endpages %}
+    </div>
+    <div class="footer__contact space-y-2 text-sm">
+      {% if store.email_address %}
+        <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
+      {% endif %}
+      {% if store.whatsapp_number %}
+        <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="footer__bottom container flex flex-col gap-2 border-t border-slate-200 py-4 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ store.name }}. Todos los derechos reservados.</p>
+    {% if section.settings.copyright_text != blank %}
+      <p>{{ section.settings.copyright_text }}</p>
+    {% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Pie de pagina",
+  "settings": [
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Texto adicional de copyright",
+      "default": ""
+    }
+  ]
+}
+{% endschema %}

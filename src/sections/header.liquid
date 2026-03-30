@@ -1,0 +1,39 @@
+<header class="header sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+  <div class="header__inner container flex flex-wrap items-center gap-4 py-4 md:gap-6">
+    <a href="/" class="header__logo text-xl font-bold tracking-tight no-underline">{{ store.name }}</a>
+    <nav class="header__nav flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-light)] md:gap-5">
+      {% categories %}
+        {% for cat in categories %}
+          <a href="{{ cat.url }}">{{ cat.name }}</a>
+        {% endfor %}
+      {% endcategories %}
+      <a href="/blog">Blog</a>
+    </nav>
+    {% if section.settings.show_search %}
+      <form class="header__search ml-auto w-full sm:w-auto" action="/busqueda" method="get">
+        <input class="w-full rounded-full border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-[var(--color-primary)] sm:w-56" type="search" name="q" placeholder="Buscar..." aria-label="Buscar">
+      </form>
+    {% endif %}
+    <button type="button" class="header__cart-button inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50" id="open-cart-button" aria-label="Abrir carrito">
+      <span class="header__cart-icon inline-flex h-[18px] w-[18px]" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.72a2 2 0 0 0 2-1.69l1.38-8.31H5.12"></path></svg>
+      </span>
+      <span>Carrito</span>
+      <span class="header__cart-count inline-flex min-h-[1.4rem] min-w-[1.4rem] items-center justify-center rounded-full bg-[var(--color-primary)] px-1 text-[0.75rem] leading-none text-white" id="cart-quantity-badge">0</span>
+    </button>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Encabezado",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Mostrar buscador",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

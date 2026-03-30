@@ -1,0 +1,43 @@
+<section class="hero-banner bg-slate-50 py-16 text-center md:py-24">
+  <div class="container mx-auto max-w-3xl">
+    <h1 class="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">{{ section.settings.heading }}</h1>
+    {% if section.settings.subheading != blank %}
+      <p class="hero-banner__sub mt-4 text-lg leading-8 text-[var(--color-text-light)]">{{ section.settings.subheading }}</p>
+    {% endif %}
+    {% if section.settings.cta_text != blank %}
+      <a href="{{ section.settings.cta_url }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">{{ section.settings.cta_text }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Banner principal",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titulo",
+      "default": "Bienvenido a nuestra tienda"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtitulo",
+      "default": "Explora nuestra seleccion de productos"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Ver productos"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "URL del boton",
+      "default": "/categorias"
+    }
+  ]
+}
+{% endschema %}

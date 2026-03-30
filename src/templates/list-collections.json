@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "collection-list": {
+      "type": "collection-list",
+      "settings": {
+        "title": "Categorias"
+      }
+    }
+  },
+  "order": ["collection-list"]
+}
