@@ -1,8 +1,8 @@
-import { setButtonState } from './add-to-cart.js'
-import { setCartQuantity } from './cart.js'
-import { createProductGallery } from './product-gallery.js'
-import { clampQuantityValue, syncQuantityInputUi } from './quantity-input.js'
-import { getTiendu } from './tiendu-sdk.js'
+import { setButtonState } from './add-to-cart'
+import { setCartQuantity } from './cart'
+import { createProductGallery } from './product-gallery'
+import { clampQuantityValue, syncQuantityInputUi } from './quantity-input'
+import { getTiendu } from './tiendu-sdk'
 import type {
 	CleanupFn,
 	ProductAttribute,
@@ -10,8 +10,8 @@ import type {
 	ProductVariant,
 	ScopeRoot,
 	SelectionMap
-} from './types.js'
-import { formatMoney, toFiniteNumber, toFiniteStock } from './utils.js'
+} from './types'
+import { formatMoney, toFiniteNumber, toFiniteStock } from './utils'
 
 interface VariantSetPriceDataArgs {
 	product: ProductData

@@ -1,5 +1,7 @@
 # Plan: Migrate Default Theme to Build Pipeline (TypeScript + Tailwind)
 
+> Historical note: this plan describes the original migration path. The implemented theme now bundles the SDK through `src/lib/scripts/tiendu-sdk.ts` and uses extensionless relative TypeScript imports.
+
 ## Goal
 
 Migrate `~/tiendu/default-theme-2.0` from a buildless theme (vanilla JS + plain CSS in `src/assets/`) to a fully built theme using the CLI build pipeline with TypeScript, esbuild bundling, and Tailwind CSS.

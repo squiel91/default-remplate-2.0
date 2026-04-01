@@ -1,9 +1,13 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "main-article": {
       "type": "main-article",
       "settings": {}
     }
   },
-  "order": ["main-article"]
+  "order": ["breadcrumbs", "main-article"]
 }

@@ -1,0 +1,86 @@
+<section class="image-content-split py-12 md:py-16">
+  <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+    <div class="{% if section.settings.reverse_order %}md:order-2{% endif %}">
+      {% if section.settings.image != blank %}
+        <img
+          class="h-full min-h-[320px] w-full object-cover object-center"
+          src="{{ section.settings.image | escape_attr }}"
+          alt="{{ section.settings.title | default: shop.name | escape_attr }}"
+          loading="lazy"
+        >
+      {% else %}
+        <div class="flex min-h-[320px] items-center justify-center bg-slate-100 text-sm text-slate-500">
+          Selecciona una imagen
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="flex {% if section.settings.reverse_order %}md:order-1{% endif %} items-center">
+      <div class="w-full px-6 py-8 md:px-10 md:py-10">
+        {% if section.settings.title != blank %}
+          <h2 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+            {{ section.settings.title | escape }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <p class="mt-4 max-w-[56ch] text-base leading-7 text-[var(--color-text-light)]">
+            {{ section.settings.description }}
+          </p>
+        {% endif %}
+
+        {% if section.settings.cta_text != blank and section.settings.cta_url != blank %}
+          <a
+            href="{{ section.settings.cta_url }}"
+            class="mt-6 inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline transition hover:opacity-90"
+          >
+            {{ section.settings.cta_text | escape }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Imagen y contenido",
+  "settings": [
+    {
+      "type": "image",
+      "id": "image",
+      "label": "Imagen"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Una historia para destacar"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripcion",
+      "default": "Agrega un texto breve para presentar esta categoria, coleccion o propuesta destacada de la tienda."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Ver mas"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "URL del boton",
+      "default": "/categorias"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_order",
+      "label": "Mostrar imagen a la derecha",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,60 @@
+{% assign has_description = product.description != blank %}
+{% assign has_specifications = product.specifications != blank and product.specifications.size > 0 %}
+
+{% if has_description or has_specifications %}
+  <section class="product-about border-t border-slate-200 py-12 md:py-16" aria-labelledby="product-about-title" data-product-about>
+    <div class="container">
+      <div class="pb-5">
+        <h2 id="product-about-title" class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+          {{ section.settings.title | default: 'Sobre el producto' | escape }}
+        </h2>
+      </div>
+
+      <div class="grid gap-10">
+        {% if has_description %}
+          <div>
+            <div class="relative max-w-3xl" data-product-about-description-wrap>
+              <div class="rte text-[1.05rem] leading-7 text-[var(--color-text-light)] [white-space:pre-line]" data-product-about-description>
+                {{ product.description }}
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-white opacity-0" aria-hidden="true" data-product-about-fade></div>
+            </div>
+            <button type="button" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-primary)] transition hover:opacity-80" hidden data-product-about-toggle>
+              <span data-product-about-toggle-label>Ver mas</span>
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-product-about-toggle-icon aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+          </div>
+        {% endif %}
+
+        {% if has_specifications %}
+          <div>
+            <dl class="grid gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
+              {% for spec in product.specifications %}
+                {% unless spec.name contains '_' %}
+                  <div class="rounded-2xl bg-slate-50 px-4 py-3">
+                    <dt class="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{{ spec.name | escape }}</dt>
+                    <dd class="mt-1 text-sm font-semibold text-slate-900">{{ spec.value | escape }}</dd>
+                  </div>
+                {% endunless %}
+              {% endfor %}
+            </dl>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Sobre el producto",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Sobre el producto"
+    }
+  ]
+}
+{% endschema %}

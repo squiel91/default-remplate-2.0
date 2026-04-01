@@ -13,7 +13,7 @@ import type {
 	SubscriberAddResult,
 	TienduCartOpenPayload,
 	TienduClient
-} from './types.js'
+} from './types'
 
 type RequestOptions = Omit<RequestInit, 'body'> & {
 	queryParams?: QueryParams

@@ -1,0 +1,28 @@
+{%- comment -%}
+  Lucide icon: credit-card
+  Usage:
+    {% render 'icon-credit-card' %}
+    {% render 'icon-credit-card', size: 32 %}
+    {% render 'icon-credit-card', class: 'custom-class' %}
+    {% render 'icon-credit-card', stroke_width: 1.5 %}
+{%- endcomment -%}
+{%- liquid
+  assign size = size | default: 24
+  assign stroke_width = stroke_width | default: 2
+-%}
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="{{ size }}"
+  height="{{ size }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="{{ stroke_width }}"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-credit-card{% if class %} {{ class }}{% endif %}"
+  aria-hidden="true"
+>
+<rect width="20" height="14" x="2" y="5" rx="2" />
+  <line x1="2" x2="22" y1="10" y2="10" />
+</svg>

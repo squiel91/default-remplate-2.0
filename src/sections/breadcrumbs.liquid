@@ -1,0 +1,56 @@
+<section class="breadcrumbs py-4 md:py-5" aria-label="Breadcrumb">
+  <div class="container">
+    <nav class="flex flex-wrap items-center gap-2 text-sm text-slate-500"
+      data-breadcrumb-nav
+      {% if product %}
+        data-current-type="product"
+        data-current-title="{{ product.title | escape_attr }}"
+      {% elsif category %}
+        data-current-type="category"
+        data-current-title="{{ category.name | escape_attr }}"
+      {% elsif blogPost %}
+        data-current-type="article"
+        data-current-title="{{ blogPost.title | escape_attr }}"
+      {% endif %}>
+      <a href="/" class="font-semibold text-[var(--color-primary)] transition hover:opacity-80 hover:no-underline">Inicio</a>
+
+      {% if product %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">{{ product.title | escape }}</span>
+      {% elsif category %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">{{ category.name | escape }}</span>
+      {% elsif blogPost %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <a href="/blog" class="font-semibold text-[var(--color-primary)] transition hover:opacity-80 hover:no-underline">Blog</a>
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">{{ blogPost.title | escape }}</span>
+      {% elsif page %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">{{ page.title | escape }}</span>
+      {% elsif search_query != blank %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">Buscar</span>
+      {% elsif template.name == 'search' %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">Buscar</span>
+      {% elsif template.name == 'blog' %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">Blog</span>
+      {% elsif template.name == 'list-collections' %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">Categorias</span>
+      {% elsif template.name == '404' %}
+        <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
+        <span class="text-slate-900">Pagina no encontrada</span>
+      {% endif %}
+    </nav>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "settings": []
+}
+{% endschema %}

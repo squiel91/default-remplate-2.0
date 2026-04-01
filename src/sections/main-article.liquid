@@ -3,13 +3,16 @@
     <article class="mx-auto max-w-3xl">
       <header class="article__header mb-6">
         <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">{{ blogPost.title }}</h1>
+        {% if blogPost.excerpt != blank %}
+          <p class="mt-4 max-w-2xl text-base leading-7 text-[var(--color-text-light)]">{{ blogPost.excerpt }}</p>
+        {% endif %}
         <time class="mt-3 block text-sm text-slate-400" datetime="{{ blogPost.createdAt }}">{{ blogPost.createdAt | date: '%d/%m/%Y' }}</time>
       </header>
       {% if blogPost.coverImage %}
         <img class="article__cover mb-8 w-full rounded-3xl object-cover" src="{{ blogPost.coverImage.url }}" alt="{{ blogPost.coverImage.alt | default: blogPost.title }}">
       {% endif %}
       <div class="rte max-w-none">
-        {% render 'content-blocks', content: blogPost.content %}
+        {% render 'content-blocks', content: blogPost.content, skip_h1: true %}
       </div>
     </article>
     <a href="/blog" class="article__back mt-8 inline-flex text-sm font-semibold text-[var(--color-primary)] no-underline">&larr; Volver al blog</a>

@@ -9,17 +9,18 @@
         "cta_url": "/categorias"
       }
     },
-    "featured-products": {
-      "type": "featured-products",
-      "settings": {
-        "title": "Productos destacadoss",
-        "limit": 4
-      }
-    },
     "categories": {
       "type": "featured-categories",
       "settings": {
         "title": "Productos destacados"
+      }
+    },
+    "featured-category": {
+      "type": "featured-category",
+      "settings": {
+        "category_handle": "alimentos",
+        "title": "",
+        "limit": 4
       }
     },
     "recent-posts": {
@@ -80,7 +81,7 @@
     "hero-carousel_ql959f",
     "hero",
     "categories",
-    "featured-products",
+    "featured-category",
     "main-search_6u0ys1",
     "recent-posts",
     "hero-banner_g9ejae"

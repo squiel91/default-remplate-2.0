@@ -1,10 +1,18 @@
-import { initHeaderCart } from '../lib/cart.js'
-import { initHeroCarousels } from '../lib/hero-carousel.js'
-import { initVariantSelectors } from '../lib/variant-selector.js'
+import { initHeaderCart } from '../lib/scripts/cart'
+import { initBreadcrumbContexts } from '../lib/scripts/breadcrumb-context'
+import { initHeaderSearch } from '../lib/scripts/header-search'
+import { initHeroCarousels } from '../lib/scripts/hero-carousel'
+import { initProductAboutSections } from '../lib/scripts/product-about'
+import { initProductShareButtons } from '../lib/scripts/product-share'
+import { initVariantSelectors } from '../lib/scripts/variant-selector'
 
 const initializeTheme = (scope: Document | HTMLElement = document): void => {
+	initBreadcrumbContexts(scope)
 	initHeaderCart()
+	initHeaderSearch()
 	initHeroCarousels(scope)
+	initProductAboutSections(scope)
+	initProductShareButtons(scope)
 	initVariantSelectors(scope)
 }
 

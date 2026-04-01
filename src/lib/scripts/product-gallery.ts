@@ -1,5 +1,5 @@
-import { SWIPE_PROGRESS_THRESHOLD, clamp } from './utils.js'
-import type { ProductGalleryHandle } from './types.js'
+import { SWIPE_PROGRESS_THRESHOLD, clamp } from './utils'
+import type { ProductGalleryHandle } from './types'
 
 interface GalleryImage {
 	id: number | null

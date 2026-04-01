@@ -1,9 +1,22 @@
-import { getTiendu } from './tiendu-sdk.js'
+import { getTiendu } from './tiendu-sdk'
+
+const CART_LOADING_MS = 4000
+
+const setCartButtonLoading = (
+	button: HTMLButtonElement,
+	loading: boolean
+): void => {
+	for (const iconNode of button.querySelectorAll<HTMLElement>('[data-cart-button-icon]')) {
+		iconNode.hidden = iconNode.dataset.cartButtonIcon !== (loading ? 'loader' : 'shopping-bag')
+	}
+}
 
 export const setCartQuantity = (quantity: unknown): void => {
 	const badge = document.getElementById('cart-quantity-badge')
 	if (!(badge instanceof HTMLElement)) return
-	badge.textContent = String(Math.max(0, Number(quantity) || 0))
+	const nextQuantity = Math.max(0, Number(quantity) || 0)
+	badge.textContent = String(nextQuantity)
+	badge.hidden = nextQuantity <= 0
 }
 
 export const syncCartQuantity = async (): Promise<void> => {
@@ -36,6 +49,7 @@ export const initHeaderCart = (): void => {
 		}
 
 		button.disabled = true
+		setCartButtonLoading(button, true)
 		try {
 			await tiendu.cart.open(({ updatedCartItemsQuantity }) => {
 				setCartQuantity(updatedCartItemsQuantity)
@@ -43,6 +57,8 @@ export const initHeaderCart = (): void => {
 		} catch {
 			window.alert('No se pudo abrir el carrito')
 		} finally {
+			await new Promise(resolve => window.setTimeout(resolve, CART_LOADING_MS))
+			setCartButtonLoading(button, false)
 			button.disabled = false
 		}
 	})

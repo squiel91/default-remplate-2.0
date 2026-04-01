@@ -1,0 +1,27 @@
+.product-stock-note[data-tone='success'] {
+  color: #16a34a;
+}
+
+.product-stock-note[data-tone='warning'] {
+  color: #d97706;
+}
+
+.product-stock-note[data-tone='error'] {
+  color: #dc2626;
+}
+
+.product-stock-note__pulse {
+  animation: product-stock-note-pulse 1.35s ease-out infinite;
+}
+
+@keyframes product-stock-note-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(2.6);
+    opacity: 0;
+  }
+}

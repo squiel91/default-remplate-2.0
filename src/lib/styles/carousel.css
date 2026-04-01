@@ -1,0 +1,3 @@
+.tiendu-carousel__thumb[aria-current='true'] {
+  border-color: var(--color-primary, #2563eb);
+}

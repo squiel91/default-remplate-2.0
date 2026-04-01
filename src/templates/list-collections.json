@@ -1,5 +1,9 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "collection-list": {
       "type": "collection-list",
       "settings": {
@@ -7,5 +11,5 @@
       }
     }
   },
-  "order": ["collection-list"]
+  "order": ["breadcrumbs", "collection-list"]
 }

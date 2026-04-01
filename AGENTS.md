@@ -1,6 +1,6 @@
 # Tiendu Default Theme 2.0
 
-This is a Liquid storefront theme for Tiendu with a sections-based architecture and an esbuild-powered build pipeline. It is the starting point for new Tiendu themes.
+This is a Liquid storefront theme for Tiendu with a sections-based architecture and an esbuild-powered build pipeline. It is the starting point for Tiendu themes.
 
 ## How to work on it
 
@@ -27,15 +27,17 @@ src/                 — Source Liquid, TypeScript, CSS, and assets
   sections/          — Section Liquid files with {% schema %} blocks
   snippets/          — Reusable Liquid snippets
   config/            — Theme settings (settings_data.json, settings_schema.json)
-  assets/            — Static assets (SDK, images) flattened into dist/assets/
-    tiendu-sdk.js    — Storefront SDK (global window.Tiendu, loaded separately)
-  lib/               — Shared TypeScript modules (imported by entries, not served directly)
-    cart.ts          — Cart button, badge sync, checkout open
-    product-gallery.ts — Product image carousel with swipe and lightbox
-    hero-carousel.ts — Auto-play hero carousel with dots and keyboard nav
-    variant-selector.ts — Variant selection, price/stock updates, URL sync
-    quantity-input.ts — Quantity +/- buttons with clamping
-    add-to-cart.ts   — Add to cart button state and SDK integration
+  assets/            — Static assets (images, icons, fonts) flattened into dist/assets/
+  lib/               — Shared TypeScript and CSS modules (imported by entries, not served directly)
+    scripts/         — Imported TypeScript modules grouped by behavior
+      cart.ts        — Cart button, badge sync, checkout open
+      product-gallery.ts — Product image carousel with swipe and lightbox
+      hero-carousel.ts — Auto-play hero carousel with dots and keyboard nav
+      variant-selector.ts — Variant selection, price/stock updates, URL sync
+      quantity-input.ts — Quantity +/- buttons with clamping
+      add-to-cart.ts — Add to cart button state and SDK integration
+      tiendu-sdk.ts  — Storefront SDK bundled into the theme entry and exposes window.Tiendu
+    styles/          — Imported CSS modules grouped by component
 docs/                — Documentation for developers and agents
 specs/               — Migration plans and specifications
 dist/                — Build output (gitignored). This is what gets uploaded to Tiendu.
@@ -53,7 +55,7 @@ Entry points are discovered by convention from `src/layout/` and `src/templates/
 | `src/layout/theme.ts` | `dist/assets/layout-theme.bundle.js` |
 | `src/layout/theme.css` | `dist/assets/layout-theme.bundle.css` |
 
-Shared modules in `src/lib/` are bundled into the entries that import them. They are not served as separate files.
+Shared modules in `src/lib/` are bundled into the entries that import them. In practice, TypeScript lives in `src/lib/scripts/` and imported CSS lives in `src/lib/styles/`. They are not served as separate files.
 
 Liquid source files in `src/layout/`, `src/sections/`, `src/snippets/`, and `src/config/` are copied into `dist/` during the build. JSON templates in `src/templates/` are also copied. Static files in `src/assets/` are flattened into `dist/assets/`.
 
@@ -118,12 +120,12 @@ They are rendered in the layout via `{% section 'header' %}` and `{% section 'fo
 - All source files are `.ts` with strict typing — no `any`.
 - Shared modules live in `src/lib/` and are imported by entry points.
 - The `tsconfig.json` uses `noEmit: true` — TypeScript is only used for type checking. esbuild handles compilation.
-- `moduleResolution: "bundler"` is set, so imports use `.js` extensions (e.g., `from './cart.js'`) which esbuild resolves to the `.ts` files.
+- `moduleResolution: "bundler"` is set, so imports use extensionless relative paths (e.g., `from './cart'`) which esbuild resolves to the `.ts` files.
 - Run `npm run check` (or `npx tsc`) to type-check. Zero errors is the baseline.
 
 ## Import conventions
 
-- TypeScript imports use relative paths with `.js` extensions: `import { initHeaderCart } from '../lib/cart.js'`
+- TypeScript imports use extensionless relative paths: `import { initHeaderCart } from '../lib/scripts/cart'`
 - Static asset imports in TS use relative paths from `src/assets/`
 - Type-only imports use `import type`
 - CSS uses Tailwind directives: `@import 'tailwindcss';`
@@ -139,12 +141,14 @@ They are rendered in the layout via `{% section 'header' %}` and `{% section 'fo
 
 ## Tiendu SDK
 
-The Tiendu SDK (`src/assets/tiendu-sdk.js`) is loaded as a separate static asset. It defines `window.Tiendu` globally and provides methods for: products, categories, pages, blog posts, cart, and analytics.
+The Tiendu SDK lives in `src/lib/scripts/tiendu-sdk.ts`. It is bundled into `layout-theme.bundle.js`, defines `window.Tiendu` globally, and provides methods for: products, categories, pages, blog posts, cart, and analytics.
 
 In TypeScript, access it via the global:
 
 ```typescript
-const tiendu = typeof window.Tiendu === 'function' ? window.Tiendu() : null
+import { getTiendu } from './tiendu-sdk'
+
+const tiendu = getTiendu()
 ```
 
 ## Custom Liquid tags
@@ -179,4 +183,4 @@ The Tiendu Liquid engine provides custom tags for fetching data server-side:
 - All static files (SVGs, images, fonts) belong in `src/assets/`. They are flattened into `dist/assets/`.
 - Never create files directly in `dist/` — it is cleaned on every build.
 - Use `asset_url` in Liquid templates for all asset references.
-- `tiendu-sdk.js` must load before the theme bundle since it sets up `window.Tiendu`.
+- `window.Tiendu` is provided by the bundled theme entry via `src/lib/scripts/tiendu-sdk.ts`.

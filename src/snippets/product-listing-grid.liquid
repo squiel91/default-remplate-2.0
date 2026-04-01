@@ -1,0 +1,16 @@
+{% assign exclude_product_id_str = exclude_product_id | append: '' %}
+{% assign rendered_count = 0 %}
+
+<div class="product-grid mt-6 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-2{% unless no_padding %} px-4 md:px-6{% endunless %}">
+  {% for product in products %}
+    {% assign product_id_str = product.id | append: '' %}
+    {% if exclude_product_id_str != blank and product_id_str == exclude_product_id_str %}
+      {% continue %}
+    {% endif %}
+    {% if max_items != blank and rendered_count >= max_items %}
+      {% break %}
+    {% endif %}
+    {% render 'product-card', product: product, breadcrumb_url: breadcrumb_url, breadcrumb_title: breadcrumb_title %}
+    {% assign rendered_count = rendered_count | plus: 1 %}
+  {% endfor %}
+</div>

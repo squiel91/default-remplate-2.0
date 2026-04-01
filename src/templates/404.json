@@ -1,5 +1,9 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "not-found": {
       "type": "not-found",
       "settings": {
@@ -9,5 +13,5 @@
       }
     }
   },
-  "order": ["not-found"]
+  "order": ["breadcrumbs", "not-found"]
 }

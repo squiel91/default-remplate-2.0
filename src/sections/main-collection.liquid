@@ -7,7 +7,7 @@
     {% products category_id: category.id, page: current_page, limit: section.settings.products_per_page, include_products_from_subcategories: true %}
       <div class="product-grid mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
         {% for product in products %}
-          {% render 'product-card', product: product %}
+          {% render 'product-card', product: product, breadcrumb_url: category.url, breadcrumb_title: category.name %}
         {% endfor %}
       </div>
       {% if paginate.pages > 1 %}

@@ -1,50 +1,52 @@
-<section class="hero-carousel" data-hero-carousel data-autoplay-interval="5000">
+<section class="relative min-h-[520px] w-full select-none overflow-hidden bg-[#dddaca] text-white md:min-h-[620px]" data-hero-carousel data-autoplay-interval="5000">
   {% if section.blocks and section.blocks.size > 0 %}
-    <div class="tiendu-carousel tiendu-carousel--hero">
-      <div class="tiendu-carousel__stage">
-        <div class="tiendu-carousel__viewport" data-role="viewport" data-dragging="false">
-          <div class="tiendu-carousel__track" data-role="track">
+    <div class="h-full min-h-[inherit]">
+      <div class="h-full min-h-[inherit]">
+        <div class="h-full min-h-[inherit] select-none overflow-hidden [touch-action:pan-y]" data-role="viewport" data-dragging="false">
+          <div class="flex h-full min-h-[inherit] will-change-transform" data-role="track">
             {% for block in section.blocks %}
               {% assign mobile_image = block.settings.mobile_image | default: block.settings.image | default: block.settings.desktop_image %}
               {% assign desktop_image = block.settings.desktop_image | default: block.settings.image %}
               {% assign image_alt = block.settings.image_alt | default: block.settings.title | default: shop.name %}
 
-              <article class="tiendu-carousel__slide tiendu-carousel__slide--hero" data-hero-carousel-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" {{ block.editor_attributes }}>
+              <article class="relative block h-full min-h-[520px] basis-full shrink-0 md:min-h-[620px]" data-hero-carousel-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" {{ block.editor_attributes }}>
                 {% if mobile_image != blank or desktop_image != blank %}
-                  <picture class="tiendu-carousel__hero-media">
+                  <picture class="absolute inset-0 block h-full w-full">
                     {% if desktop_image != blank and desktop_image != mobile_image %}
                       <source media="(min-width: 768px)" srcset="{{ desktop_image | escape_attr }}">
                     {% endif %}
                     <img
+                      class="h-full w-full select-none object-cover"
                       src="{{ mobile_image | escape_attr }}"
                       alt="{{ image_alt | escape_attr }}"
+                      draggable="false"
                       loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                       decoding="async"
                     >
                   </picture>
                 {% else %}
-                  <div class="tiendu-carousel__hero-media tiendu-carousel__hero-media--empty" aria-hidden="true"></div>
+                  <div class="tiendu-carousel__hero-media--empty absolute inset-0" aria-hidden="true"></div>
                 {% endif %}
 
-                <div class="tiendu-carousel__hero-overlay"></div>
+                <div class="tiendu-carousel__hero-overlay absolute inset-0"></div>
 
-                <div class="tiendu-carousel__hero-content">
-                  <div class="container">
-                    <div class="tiendu-carousel__hero-content-inner">
+                <div class="absolute inset-0 z-[1] w-full">
+                  <div class="container flex h-full items-end">
+                    <div class="flex w-full max-w-[760px] flex-col items-start gap-5 px-0 pb-20 text-white md:pb-24 max-md:max-w-full max-md:px-6 max-md:pb-16">
                       {% if block.settings.title != blank %}
                         {% if forloop.first %}
-                          <h1 class="tiendu-carousel__hero-title">{{ block.settings.title }}</h1>
+                          <h1 class="max-w-[18ch] font-serif text-4xl font-normal leading-[1.16] tracking-normal text-white md:text-[clamp(1.75rem,4.4vw,3.25rem)] max-md:max-w-none">{{ block.settings.title }}</h1>
                         {% else %}
-                          <h2 class="tiendu-carousel__hero-title">{{ block.settings.title }}</h2>
+                          <h2 class="max-w-[18ch] font-serif text-4xl font-normal leading-[1.16] tracking-normal text-white md:text-[clamp(1.75rem,4.4vw,3.25rem)] max-md:max-w-none">{{ block.settings.title }}</h2>
                         {% endif %}
                       {% endif %}
 
                       {% if block.settings.subtitle != blank %}
-                        <p class="tiendu-carousel__hero-subtitle">{{ block.settings.subtitle }}</p>
+                        <p class="max-w-[56ch] text-base leading-7 text-white/95 md:text-[1.2rem] md:leading-[1.6] max-md:max-w-none">{{ block.settings.subtitle }}</p>
                       {% endif %}
 
                       {% if block.settings.button_text != blank and block.settings.button_url != blank %}
-                        <a href="{{ block.settings.button_url }}" class="tiendu-carousel__hero-cta inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">
+                        <a href="{{ block.settings.button_url }}" class="tiendu-carousel__hero-cta inline-flex items-center justify-center self-start rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">
                           {{ block.settings.button_text }}
                         </a>
                       {% endif %}
@@ -56,25 +58,25 @@
           </div>
         </div>
 
-        <div class="tiendu-carousel__hero-controls" data-role="hero-controls" aria-label="Controles del carrusel principal">
-          <button class="tiendu-carousel__nav tiendu-carousel__action-surface" type="button" data-role="prev-image" aria-label="Slide anterior"{% if section.blocks.size <= 1 %} hidden{% endif %}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        <div class="absolute bottom-3 left-1/2 z-[2] inline-flex -translate-x-1/2 items-center gap-2 max-md:bottom-3" data-role="hero-controls" aria-label="Controles del carrusel principal">
+          <button class="inline-flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 text-white/80 transition hover:text-white disabled:opacity-40" type="button" data-role="prev-image" aria-label="Slide anterior"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
           </button>
 
-          <div class="tiendu-carousel__dots" data-role="dots" role="tablist" aria-label="Slides del hero"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+          <div class="inline-flex items-center gap-1.5" data-role="dots" role="tablist" aria-label="Slides del hero"{% if section.blocks.size <= 1 %} hidden{% endif %}>
             {% for block in section.blocks %}
-              <button class="tiendu-carousel__dot{% if forloop.first %} is-active{% endif %}" type="button" data-dot-index="{{ forloop.index0 }}" role="tab" aria-label="Ir al slide {{ forloop.index }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+              <button class="tiendu-carousel__dot h-2 w-2 rounded-full border border-transparent bg-white/50 p-0 transition-transform{% if forloop.first %} is-active{% endif %}" type="button" data-dot-index="{{ forloop.index0 }}" role="tab" aria-label="Ir al slide {{ forloop.index }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"></button>
             {% endfor %}
           </div>
 
-          <button class="tiendu-carousel__nav tiendu-carousel__action-surface" type="button" data-role="next-image" aria-label="Slide siguiente"{% if section.blocks.size <= 1 %} hidden{% endif %}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+          <button class="inline-flex h-6 w-6 items-center justify-center border-0 bg-transparent p-0 text-white/80 transition hover:text-white disabled:opacity-40" type="button" data-role="next-image" aria-label="Slide siguiente"{% if section.blocks.size <= 1 %} hidden{% endif %}>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
           </button>
         </div>
       </div>
     </div>
   {% else %}
-    <div class="hero-carousel__empty bg-slate-100 py-16 text-slate-900">
+    <div class="bg-slate-100 py-16 text-slate-900">
       <div class="container text-center">
         <h2 class="text-2xl font-semibold tracking-tight">Hero Carousel</h2>
         <p class="mt-2 text-[var(--color-text-light)]">Agrega slides a esta seccion desde el editor.</p>

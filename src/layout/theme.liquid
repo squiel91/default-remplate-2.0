@@ -4,6 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page_title }}</title>
+  <meta name="description" content="{{ page_description | escape_attr }}">
+  <meta property="og:title" content="{{ page_title | escape_attr }}">
+  <meta property="og:description" content="{{ page_description | escape_attr }}">
+  <meta property="og:url" content="{{ canonical_url | escape_attr }}">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | escape_attr }}">
+  <meta name="twitter:description" content="{{ page_description | escape_attr }}">
+  {% if product and product.coverImage %}
+    <meta property="og:image" content="{{ product.coverImage.url | escape_attr }}">
+    <meta name="twitter:image" content="{{ product.coverImage.url | escape_attr }}">
+  {% elsif blogPost and blogPost.coverImage %}
+    <meta property="og:image" content="{{ blogPost.coverImage.url | escape_attr }}">
+    <meta name="twitter:image" content="{{ blogPost.coverImage.url | escape_attr }}">
+  {% elsif page and page.coverImage %}
+    <meta property="og:image" content="{{ page.coverImage.url | escape_attr }}">
+    <meta name="twitter:image" content="{{ page.coverImage.url | escape_attr }}">
+  {% endif %}
   <link rel="icon" href="{{ 'favicon.svg' | asset_url }}" type="image/svg+xml">
   <link rel="canonical" href="{{ canonical_url }}">
   {{ 'layout-theme.bundle.css' | asset_url | stylesheet_tag }}

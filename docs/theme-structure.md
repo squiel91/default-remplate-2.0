@@ -31,7 +31,6 @@ my-theme/
 │   │   ├── hero-carousel.liquid
 │   │   ├── main-product.liquid
 │   │   ├── main-collection.liquid
-│   │   ├── featured-products.liquid
 │   │   ├── newsletter.liquid
 │   │   └── ...
 │   ├── snippets/            # Liquid snippets → dist/snippets/
@@ -40,15 +39,18 @@ my-theme/
 │   ├── config/              # theme settings → dist/config/
 │   │   ├── settings_data.json    # current settings + global sections
 │   │   └── settings_schema.json  # settings definitions
-│   ├── lib/                 # shared TypeScript modules (not entry points)
-│   │   ├── cart.ts          # cart button, badge sync, checkout open
-│   │   ├── product-gallery.ts  # image carousel with swipe and lightbox
-│   │   ├── hero-carousel.ts    # auto-play hero carousel
-│   │   ├── variant-selector.ts # variant selection, price/stock updates
-│   │   ├── quantity-input.ts   # quantity +/- buttons
-│   │   └── add-to-cart.ts      # add to cart button state
+│   ├── lib/                 # shared TypeScript and CSS modules (not entry points)
+│   │   ├── scripts/         # imported TS modules used by theme.ts
+│   │   │   ├── cart.ts          # cart button, badge sync, checkout open
+│   │   │   ├── product-gallery.ts  # image carousel with swipe and lightbox
+│   │   │   ├── hero-carousel.ts    # auto-play hero carousel
+│   │   │   ├── variant-selector.ts # variant selection, price/stock updates
+│   │   │   ├── quantity-input.ts   # quantity +/- buttons
+│   │   │   ├── add-to-cart.ts      # add to cart button state
+│   │   │   └── tiendu-sdk.ts       # storefront SDK bundled into the theme entry
+│   │   └── styles/             # imported CSS modules used by theme.css
 │   └── assets/              # static assets flattened into dist/assets/
-│       └── tiendu-sdk.js    # storefront SDK (loaded separately, not bundled)
+│       └── favicon.svg
 │
 └── dist/                    # build output (gitignored)
     ├── layout/
@@ -59,7 +61,7 @@ my-theme/
     └── assets/
         ├── layout-theme.bundle.js
         ├── layout-theme.bundle.css
-        ├── tiendu-sdk.js
+        ├── favicon.svg
         └── ...
 ```
 
@@ -76,7 +78,7 @@ No configuration is needed — just create a file in the right place.
 
 ### Shared modules
 
-Files in `src/lib/` are not entry points. They are imported by entries and bundled into them by esbuild. If two entries import the same shared module, it is duplicated in both bundles.
+Files in `src/lib/` are not entry points. They are imported by entries and bundled into them by esbuild. In practice, scripts live in `src/lib/scripts/` and imported CSS lives in `src/lib/styles/`.
 
 ### CSS bundling with Tailwind
 
@@ -87,6 +89,8 @@ The CSS entry point (`src/layout/theme.css`) uses Tailwind CSS:
 ```
 
 The build pipeline auto-detects `@tailwindcss/postcss` and processes Tailwind utilities. Custom CSS that cannot be expressed as utilities (animations, complex selectors) is also included in this file.
+
+In practice, `src/layout/theme.css` can stay small and import component-scoped CSS modules from `src/lib/styles/`.
 
 Tailwind scans `.liquid`, `.ts`, and `.css` files in `src/layout/`, `src/templates/`, `src/sections/`, and `src/snippets/` for class names.
 
@@ -159,7 +163,7 @@ Global settings (colors, typography, etc.) are defined in `config/settings_schem
 All source files use TypeScript with strict mode enabled. Key details:
 
 - **No `any`** — all code is fully typed.
-- **Imports use `.js` extensions** — this is the standard TS/ESM convention. esbuild resolves them to the actual `.ts` files. Example: `import { initHeaderCart } from '../lib/cart.js'`
+- **Imports use extensionless relative paths** — with `moduleResolution: "bundler"`, TypeScript and esbuild resolve them to the actual `.ts` files. Example: `import { initHeaderCart } from '../lib/scripts/cart'`
 - **Type-only imports** use `import type`.
 - **`tsconfig.json`** uses `noEmit: true` and `moduleResolution: "bundler"`. TypeScript is for type checking only; esbuild handles compilation.
 - Run `npm run check` to type-check. Zero errors is the baseline.
@@ -173,10 +177,9 @@ Use `asset_url` to reference built bundles:
 {{ 'layout-theme.bundle.js' | asset_url | script_tag }}
 ```
 
-The Tiendu SDK is loaded separately and must come before the theme bundle:
+The theme bundle already includes the storefront SDK from `src/lib/scripts/tiendu-sdk.ts`, so `theme.liquid` only needs the layout bundle:
 
 ```liquid
-{{ 'tiendu-sdk.js' | asset_url | script_tag }}
 {{ 'layout-theme.bundle.js' | asset_url | script_tag }}
 ```
 
@@ -221,4 +224,4 @@ The Tiendu Liquid engine provides custom tags for fetching data server-side:
 
 ## Adding a new shared module
 
-Create a `.ts` file in `src/lib/` and import it from the layout entry point (`src/layout/theme.ts`). It will be bundled into the output by esbuild.
+Create a `.ts` file in `src/lib/scripts/` and import it from the layout entry point (`src/layout/theme.ts`). It will be bundled into the output by esbuild.

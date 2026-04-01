@@ -1,0 +1,6 @@
+{% assign rating_value = rating | default: 0 %}
+{% assign reviews_count = reviews_count | default: 0 %}
+<div class="flex items-center gap-2 text-sm text-slate-600">
+  {% render 'rating-stars', rating: rating_value, size: 22, empty_class: 'text-slate-200', filled_class: 'text-amber-400' %}
+  <span>{{ rating_value | round: 1 }} ({{ reviews_count }})</span>
+</div>

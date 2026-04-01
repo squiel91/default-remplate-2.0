@@ -1,5 +1,5 @@
-import { HERO_AUTOPLAY_INTERVAL, SWIPE_PROGRESS_THRESHOLD, clamp } from './utils.js'
-import type { ScopeRoot } from './types.js'
+import { HERO_AUTOPLAY_INTERVAL, SWIPE_PROGRESS_THRESHOLD, clamp } from './utils'
+import type { ScopeRoot } from './types'
 
 interface HeroCarouselHandle {
 	destroy(): void

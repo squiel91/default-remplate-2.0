@@ -1,5 +1,9 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "main-blog": {
       "type": "main-blog",
       "settings": {
@@ -7,5 +11,5 @@
       }
     }
   },
-  "order": ["main-blog"]
+  "order": ["breadcrumbs", "main-blog"]
 }

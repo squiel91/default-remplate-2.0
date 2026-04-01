@@ -1,19 +1,38 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "main-product": {
       "type": "main-product",
       "settings": {}
+    },
+    "product-about": {
+      "type": "product-about",
+      "settings": {
+        "title": "Sobre el producto"
+      }
+    },
+    "product-reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "title": "Reseñas"
+      }
     },
     "related": {
       "type": "related-products",
       "settings": {
         "title": "Tambien te puede interesar",
-        "limit": 2
+        "limit": 4
       }
     }
   },
   "order": [
+    "breadcrumbs",
     "main-product",
+    "product-about",
+    "product-reviews",
     "related"
   ]
 }

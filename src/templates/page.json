@@ -1,5 +1,9 @@
 {
   "sections": {
+    "breadcrumbs": {
+      "type": "breadcrumbs",
+      "settings": {}
+    },
     "main-page": {
       "type": "main-page",
       "settings": {}
@@ -13,6 +17,7 @@
     }
   },
   "order": [
+    "breadcrumbs",
     "main-page",
     "main-search_glrq3y"
   ]

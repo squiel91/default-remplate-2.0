@@ -1,17 +1,13 @@
-<section class="related-products py-12 md:py-16">
+<section class="related-products py-12 md:py-16 [&_.product-card__image]:rounded-2xl">
   <div class="container">
     {% if section.settings.title != blank %}
-      <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ section.settings.title }}</h2>
+      <div class="pb-5">
+        <h2 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">{{ section.settings.title }}</h2>
+      </div>
     {% endif %}
     {% if product %}
-      {% products limit: section.settings.limit, sort: 'sales', order: 'desc' %}
-        <div class="product-grid mt-6 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
-          {% for p in products %}
-            {% if p.id != product.id %}
-              {% render 'product-card', product: p %}
-            {% endif %}
-          {% endfor %}
-        </div>
+      {% products related_to_product_id: product.id, limit: section.settings.limit %}
+        {% render 'product-listing-grid', products: products, no_padding: true %}
       {% endproducts %}
     {% endif %}
   </div>

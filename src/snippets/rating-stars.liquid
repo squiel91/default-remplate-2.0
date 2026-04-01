@@ -1,0 +1,22 @@
+{% assign rating_value = rating | default: 0 %}
+{% assign rating_fill_percentage = rating_value | times: 20 %}
+{% assign star_size = size | default: 22 %}
+{% assign empty_class = empty_class | default: 'text-slate-200' %}
+{% assign filled_class = filled_class | default: 'text-amber-400' %}
+
+<div class="relative inline-flex" aria-hidden="true">
+  <div class="flex {{ empty_class }}">
+    {% for _ in (1..5) %}
+      {% render 'icon-star', size: star_size, class: 'fill-current' %}
+    {% endfor %}
+  </div>
+  {% if rating_fill_percentage > 0 %}
+    <div class="absolute inset-y-0 left-0 overflow-hidden {{ filled_class }}" style="width: {{ rating_fill_percentage }}%;">
+      <div class="flex w-max">
+        {% for _ in (1..5) %}
+          {% render 'icon-star', size: star_size, class: 'fill-current' %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>

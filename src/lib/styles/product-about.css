@@ -1,0 +1,24 @@
+[data-product-about][data-expanded='false'] [data-product-about-description-wrap] {
+  max-height: 10.5rem;
+  overflow: hidden;
+}
+
+[data-product-about][data-expanded='false'] [data-product-about-fade] {
+  opacity: 1;
+}
+
+[data-product-about][data-expanded='true'] [data-product-about-fade] {
+  opacity: 0;
+}
+
+[data-product-about][data-expanded='true'] [data-product-about-toggle-icon] {
+  transform: rotate(180deg);
+}
+
+[data-product-about-fade] {
+  transition: opacity 180ms ease;
+}
+
+[data-product-about-toggle-icon] {
+  transition: transform 180ms ease;
+}

@@ -1,13 +1,20 @@
 <div class="product-card">
-  <a href="{{ product.url }}" class="group block overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+  {% capture product_breadcrumb_href %}{{ product.url }}{% endcapture %}
+  {% if breadcrumb_url != blank and breadcrumb_title != blank and breadcrumb_title != 'Inicio' %}
+    {% capture product_breadcrumb_href %}{{ product.url }}?url-from={{ breadcrumb_url | url_encode }}&title-from={{ breadcrumb_title | url_encode }}{% endcapture %}
+  {% endif %}
+  <a href="{{ product_breadcrumb_href }}" class="group block bg-white no-underline transition hover:opacity-90">
     {% if product.coverImage %}
-      <img class="product-card__image aspect-square w-full rounded-2xl bg-slate-100 object-cover" src="{{ product.coverImage.url }}" alt="{{ product.coverImage.alt | default: product.title }}" loading="lazy">
+      <img class="product-card__image aspect-square w-full bg-slate-100 object-cover" src="{{ product.coverImage.url }}" alt="{{ product.coverImage.alt | default: product.title }}" loading="lazy">
     {% else %}
-      <div class="product-card__image product-card__image--placeholder aspect-square w-full rounded-2xl bg-slate-100"></div>
+      <div class="product-card__image product-card__image--placeholder aspect-square w-full bg-slate-100"></div>
     {% endif %}
-    <h3 class="product-card__name mt-4 text-base font-semibold text-slate-950">{{ product.title }}</h3>
-    {% if product.basePriceInCents %}
-      <p class="product-card__price mt-2 text-sm font-semibold text-[var(--color-primary)]">{{ product.basePriceInCents | money }}</p>
-    {% endif %}
+    <div class="mt-2 flex flex-col gap-1">
+      <h3 class="product-card__name text-base font-semibold text-slate-950">{{ product.title }}</h3>
+      {% render 'product-rating', rating: product.averageRating, reviews_count: product.reviewsQuantity %}
+      {% if product.basePriceInCents %}
+        <p class="product-card__price text-sm font-semibold text-[var(--color-primary)]">{{ product.basePriceInCents | money }}</p>
+      {% endif %}
+    </div>
   </a>
 </div>
