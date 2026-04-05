@@ -18,6 +18,14 @@ export interface TienduCartApi {
   ): Promise<void>;
 }
 
+export interface TienduSearchOpenOptions {
+  query?: string | null;
+}
+
+export interface TienduSearchApi {
+  open(options?: TienduSearchOpenOptions): Promise<HTMLIFrameElement>;
+}
+
 export interface ProductListing {
   id: number;
   title?: string | null;
@@ -143,6 +151,7 @@ export interface TienduClient {
     trackViewContent(params: ViewContentTrackingParams): void;
   };
   cart: TienduCartApi;
+  search: TienduSearchApi;
 }
 
 export interface ProductImage {

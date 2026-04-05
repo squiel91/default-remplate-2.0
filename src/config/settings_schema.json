@@ -27,5 +27,22 @@
         "default": "#6b7280"
       }
     ]
+  },
+  {
+    "name": "Tipografia",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Fuente de texto",
+        "default": "roboto_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Fuente de titulos",
+        "default": "roboto_n4"
+      }
+    ]
   }
 ]

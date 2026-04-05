@@ -10,9 +10,12 @@
       <a href="/blog">Blog</a>
     </nav>
     {% if section.settings.show_search %}
-      <button type="button" class="header__search-trigger ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-50" aria-label="Abrir buscador" data-header-search-trigger>
-        <span class="inline-flex h-4 w-4 items-center justify-center">
+      <button type="button" class="header__search-trigger ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-50 disabled:cursor-wait disabled:opacity-70" aria-label="Abrir buscador" data-header-search-trigger>
+        <span class="inline-flex h-4 w-4 items-center justify-center" aria-hidden="true" data-search-button-icon="search">
           {% render 'icon-search', size: 16 %}
+        </span>
+        <span class="inline-flex h-4 w-4 items-center justify-center animate-spin" aria-hidden="true" data-search-button-icon="loader" hidden>
+          {% render 'icon-loader-circle', size: 16 %}
         </span>
       </button>
     {% endif %}
@@ -27,53 +30,6 @@
     </button>
   </div>
 </header>
-
-{% if section.settings.show_search %}
-  <div class="fixed inset-0 z-50 bg-slate-950/55" hidden data-header-search-overlay>
-    <div class="mx-auto w-full max-w-3xl px-4 pt-6 md:px-6 md:pt-10" data-header-search-dialog>
-      <div class="rounded-[1.75rem] bg-white p-4 shadow-2xl md:p-5" data-header-search-panel>
-        <form class="relative" action="/busqueda" method="get" data-header-search-form>
-          <span class="pointer-events-none absolute inset-y-0 left-5 inline-flex items-center text-slate-400">
-            {% render 'icon-search', size: 18 %}
-          </span>
-          <input class="w-full rounded-full border border-slate-300 bg-white py-3 pr-14 pl-12 text-base outline-none transition focus:border-[var(--color-primary)]" type="text" name="q" placeholder="Buscar productos..." aria-label="Buscar productos" autocomplete="off" data-header-search-input>
-          <button type="button" class="absolute inset-y-0 right-4 inline-flex items-center justify-center text-slate-500 transition hover:text-slate-900" aria-label="Cerrar buscador" data-header-search-close>
-            {% render 'icon-x', size: 18 %}
-          </button>
-        </form>
-
-        <div class="mt-4 min-h-10">
-          <div class="flex items-center justify-center py-6 text-slate-500" hidden data-header-search-loader>
-            {% render 'icon-loader-circle', size: 20, class: 'animate-spin' %}
-          </div>
-
-          <p class="px-2 py-6 text-sm text-slate-500" data-header-search-initial>
-            Empieza a escribir para buscar productos.
-          </p>
-
-          <p class="px-2 py-6 text-sm text-slate-500" hidden data-header-search-empty>
-            No encontramos productos para esa busqueda.
-          </p>
-
-          <div class="grid max-h-[min(60vh,32rem)] gap-2 overflow-y-auto" hidden data-header-search-results></div>
-
-          <template data-header-search-result-template>
-            <a class="grid grid-cols-[72px_minmax(0,1fr)] items-center gap-3 rounded-2xl px-2 py-2 no-underline transition hover:bg-slate-50" href="#" data-search-result-link>
-              <div class="aspect-square overflow-hidden rounded-xl bg-slate-100">
-                <img class="h-full w-full object-cover object-center" alt="" hidden data-search-result-image>
-                <div class="h-full w-full bg-slate-100" data-search-result-image-fallback></div>
-              </div>
-              <div class="min-w-0">
-                <p class="truncate text-sm font-semibold text-slate-950" data-search-result-title></p>
-                <p class="mt-1 text-sm text-[var(--color-primary)]" data-search-result-price></p>
-              </div>
-            </a>
-          </template>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endif %}
 
 {% schema %}
 {

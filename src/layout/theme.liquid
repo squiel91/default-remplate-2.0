@@ -22,16 +22,84 @@
     <meta property="og:image" content="{{ page.coverImage.url | escape_attr }}">
     <meta name="twitter:image" content="{{ page.coverImage.url | escape_attr }}">
   {% endif %}
+  {% assign body_font = settings.type_body_font %}
+  {% assign body_font_bold = body_font | font_modify: 'weight', 'bold' %}
+  {% assign body_font_italic = body_font | font_modify: 'style', 'italic' %}
+  {% assign heading_font = settings.type_heading_font | default: body_font %}
+  {% assign heading_font_bold = heading_font | font_modify: 'weight', 'bold' | default: heading_font %}
+  {% assign heading_font_italic = heading_font | font_modify: 'style', 'italic' %}
+  {% if body_font and body_font.system? != true %}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ body_font | font_url }}"
+      type="font/{{ body_font.format | default: 'woff2' }}"
+      crossorigin
+      fetchpriority="low"
+    >
+  {% endif %}
+  {% if heading_font and heading_font.system? != true and heading_font.picker_value != body_font.picker_value %}
+    <link
+      rel="preload"
+      as="font"
+      href="{{ heading_font | font_url }}"
+      type="font/{{ heading_font.format | default: 'woff2' }}"
+      crossorigin
+      fetchpriority="low"
+    >
+  {% endif %}
   <link rel="icon" href="{{ 'favicon.svg' | asset_url }}" type="image/svg+xml">
   <link rel="canonical" href="{{ canonical_url }}">
   {{ 'layout-theme.bundle.css' | asset_url | stylesheet_tag }}
   <script src="{{ 'layout-theme.bundle.js' | asset_url }}" defer></script>
   <style>
+    {% if body_font %}
+      {{ body_font | font_face: font_display: 'swap' }}
+    {% endif %}
+    {% if body_font_bold %}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+    {% endif %}
+    {% if body_font_italic %}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+    {% endif %}
+    {% if heading_font and heading_font.picker_value != body_font.picker_value %}
+      {{ heading_font | font_face: font_display: 'swap' }}
+    {% endif %}
+    {% if heading_font_bold and heading_font_bold.picker_value != body_font_bold.picker_value %}
+      {{ heading_font_bold | font_face: font_display: 'swap' }}
+    {% endif %}
+    {% if heading_font_italic and heading_font_italic.picker_value != body_font_italic.picker_value %}
+      {{ heading_font_italic | font_face: font_display: 'swap' }}
+    {% endif %}
+
     :root {
+      --font-body-family: {{ body_font.family | json | default: '"Inter"' }}, {{ body_font.fallback_families | default: 'sans-serif' }};
+      --font-body-style: {{ body_font.style | default: 'normal' }};
+      --font-body-weight: {{ body_font.weight | default: 400 }};
+      --font-heading-family: {{ heading_font.family | default: body_font.family | default: 'Inter' | json }}, {{ heading_font.fallback_families | default: body_font.fallback_families | default: 'sans-serif' }};
+      --font-heading-style: {{ heading_font.style | default: body_font.style | default: 'normal' }};
+      --font-heading-weight: {{ heading_font.weight | default: body_font.weight | default: 400 }};
       --color-primary: {{ settings.color_primary | default: '#2563eb' }};
       --color-background: {{ settings.color_background | default: '#ffffff' }};
       --color-text: {{ settings.color_text | default: '#1a1a1a' }};
       --color-text-light: {{ settings.color_text_light | default: '#6b7280' }};
+    }
+
+    body {
+      font-family: var(--font-body-family);
+      font-style: var(--font-body-style);
+      font-weight: var(--font-body-weight);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: var(--font-heading-family);
+      font-style: var(--font-heading-style);
+      font-weight: var(--font-heading-weight);
     }
   </style>
   {{ content_for_header }}
