@@ -1,0 +1,32 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "copyright_text": "hola"
+      },
+      "blocks": {
+        "footer-text-column": {
+          "type": "text_column",
+          "settings": {
+            "title": "Visitanos",
+            "text": "<p>Agrega una columna de texto para contar algo importante de la marca, horarios o zonas de entrega.</p>"
+          }
+        },
+        "footer-image-column": {
+          "type": "image_column",
+          "settings": {
+            "title": "Pagos",
+            "image": "/assets/mercadopago.svg",
+            "image_alt": "Mercado Pago",
+            "caption": "Ejemplo de una columna con imagen dentro del mismo footer."
+          }
+        }
+      },
+      "block_order": ["footer-text-column", "footer-image-column"]
+    }
+  },
+  "order": ["footer"]
+}

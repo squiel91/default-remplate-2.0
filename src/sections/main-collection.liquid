@@ -1,27 +1,32 @@
 <section class="main-collection py-12 md:py-16">
   <div class="container">
-    <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ category.name }}</h1>
-    {% if category.description != blank %}
-      <p class="collection-description mt-3 max-w-3xl text-base leading-7 text-[var(--color-text-light)]">{{ category.description }}</p>
+    <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ collection.name }}</h1>
+    {% if collection.description != blank %}
+      <p class="collection-description mt-3 max-w-3xl text-base leading-7 text-[var(--color-text-light)]">{{ collection.description }}</p>
     {% endif %}
-    {% products category_id: category.id, page: current_page, limit: section.settings.products_per_page, include_products_from_subcategories: true %}
+
+    {% paginate collection.products by section.settings.products_per_page %}
       <div class="product-grid mt-8 grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
-        {% for product in products %}
-          {% render 'product-card', product: product, breadcrumb_url: category.url, breadcrumb_title: category.name %}
+        {% for product in collection.products %}
+          {% render 'product-card', product: product, breadcrumb_url: collection.url, breadcrumb_title: collection.name %}
         {% endfor %}
       </div>
+
       {% if paginate.pages > 1 %}
         <nav class="pagination">
           {{ paginate | default_pagination }}
         </nav>
       {% endif %}
-    {% endproducts %}
+    {% endpaginate %}
   </div>
 </section>
 
 {% schema %}
 {
   "name": "Coleccion principal",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
   "settings": [
     {
       "type": "number",

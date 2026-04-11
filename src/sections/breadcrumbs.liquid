@@ -39,7 +39,7 @@
         <span class="text-slate-900">Blog</span>
       {% elsif template.name == 'list-collections' %}
         <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
-        <span class="text-slate-900">Categorias</span>
+        <span class="text-slate-900">Colecciones</span>
       {% elsif template.name == '404' %}
         <span class="inline-flex text-slate-300" aria-hidden="true">{% render 'icon-chevron-right', size: 14 %}</span>
         <span class="text-slate-900">Pagina no encontrada</span>
@@ -51,6 +51,9 @@
 {% schema %}
 {
   "name": "Breadcrumbs",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": []
 }
 {% endschema %}

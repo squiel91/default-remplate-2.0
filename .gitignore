@@ -1,11 +1,8 @@
-# Dependencies
-node_modules/
-
-# Build output
-dist/
-
 # Local Tiendu CLI state
 .cli/
+
+# Generated upload artifact
+dist/
 
 # Logs
 npm-debug.log*
@@ -27,4 +24,3 @@ Thumbs.db
 # Temporary/cache files
 .cache/
 coverage/
-*.tsbuildinfo

@@ -3,9 +3,10 @@
     {% if section.settings.title != blank %}
       <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ section.settings.title }}</h2>
     {% endif %}
-    {% blog_posts limit: section.settings.limit %}
+
+    {% if section.settings.posts != blank and section.settings.posts.size > 0 %}
       <div class="post-grid mt-6 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
-        {% for post in blog_posts %}
+        {% for post in section.settings.posts %}
           {% assign article_href = post.url | append: '?url-from=%2F&title-from=Inicio' %}
           <article class="post-card overflow-hidden rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
             {% if post.coverImage %}
@@ -21,13 +22,18 @@
           </article>
         {% endfor %}
       </div>
-    {% endblog_posts %}
+    {% else %}
+      <p class="mt-6 text-sm text-[var(--color-text-light)]">Selecciona los articulos que quieres destacar en esta seccion.</p>
+    {% endif %}
   </div>
 </section>
 
 {% schema %}
 {
   "name": "Posts recientes",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
     {
       "type": "text",
@@ -36,10 +42,9 @@
       "default": "Del blog"
     },
     {
-      "type": "number",
-      "id": "limit",
-      "label": "Cantidad de posts",
-      "default": 3
+      "type": "article_list",
+      "id": "posts",
+      "label": "Articulos"
     }
   ]
 }

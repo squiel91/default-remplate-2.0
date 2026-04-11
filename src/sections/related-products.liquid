@@ -5,10 +5,12 @@
         <h2 class="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">{{ section.settings.title }}</h2>
       </div>
     {% endif %}
-    {% if product %}
-      {% products related_to_product_id: product.id, limit: section.settings.limit %}
-        {% render 'product-listing-grid', products: products, no_padding: true %}
-      {% endproducts %}
+    {% if product and product.id %}
+      {% paginate product.related_products by section.settings.limit %}
+        {% if product.related_products_count > 0 %}
+          {% render 'product-listing-grid', products: product.related_products, no_padding: true %}
+        {% endif %}
+      {% endpaginate %}
     {% endif %}
   </div>
 </section>
@@ -16,6 +18,9 @@
 {% schema %}
 {
   "name": "Productos relacionados",
+  "enabled_on": {
+    "templates": ["product"]
+  },
   "settings": [
     {
       "type": "text",

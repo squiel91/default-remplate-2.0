@@ -1,69 +1,91 @@
 # Tiendu Default Theme 2.0
 
-This is a Liquid storefront theme for Tiendu with a sections-based architecture and an esbuild-powered build pipeline. It is the starting point for Tiendu themes.
+This theme is a Tiendu Liquid theme authored directly in `src/`.
 
-## How to work on it
+For agent work, the supported authoring surface is:
 
-- Read `docs/getting-started.md` for setup and development workflow.
-- Read `docs/theme-structure.md` for the directory layout, build conventions, and how to add new sections and entry points.
-- Run `tiendu build` to build. Run `tiendu dev` to develop with live preview.
-- Run `npm run check` to type-check without building.
+- Liquid templates and sections
+- JSON template and section-group files
+- Theme settings JSON
+- Plain CSS
+- Static assets and snippets
 
-## Theme architecture
+Do not assume a supported TypeScript, Tailwind, or build-pipeline workflow for new work in this theme.
 
-This theme uses a **sections-based architecture**. Pages are composed from reusable sections defined in JSON templates:
+## Read first
 
-- **JSON templates** (`templates/*.json`) declare which sections appear on each page and in what order.
-- **Sections** (`sections/*.liquid`) are self-contained components with settings and blocks declared via `{% schema %}`.
-- **Global sections** (header, footer) are defined in `config/settings_data.json` and rendered from the layout.
-- **Theme settings** (colors, typography) are configured in `config/settings_schema.json` and applied as CSS custom properties.
+- Read `.agents/skills/theme-authoring/SKILL.md` for the expected editing workflow.
+- Read `.agents/skills/tiendu-theme-reference/SKILL.md` for the directory map, Liquid object shapes, and pagination behavior.
+- Read `.agents/skills/add-icon-snippets/SKILL.md` if the task involves adding or replacing icon snippets.
+- Read `.agents/skills/deploy-with-tiendu-cli/SKILL.md` if the task involves CLI setup, pulling, preview sync, push, or publish.
 
-## Directory structure
+## Agent priorities
 
+- Work in `src/`, not `dist/`.
+- Prefer the smallest correct Liquid / JSON / CSS change.
+- Keep sections schema-driven so the admin customizer can edit them.
+- Prefer the current object-based Liquid API over legacy custom data-fetch tags.
+- Preserve Spanish storefront URLs and content structure unless the user asks otherwise.
+- For CLI work, prefer `--non-interactive` commands.
+
+## Source of truth
+
+Authoritative theme files live under `src/`:
+
+- `src/layout/theme.liquid` — root layout, global CSS variables, shared assets, header/footer groups
+- `src/templates/*.json` — page composition per template
+- `src/sections/*.liquid` — editable theme sections
+- `src/sections/*-group.json` — global section groups like header/footer
+- `src/snippets/*.liquid` — reusable partials
+- `src/config/settings_schema.json` — theme setting definitions
+- `src/config/settings_data.json` — current theme setting values and global section instances
+- `src/assets/*` — static assets, including the committed storefront CSS and JS
+
+`dist/` is a generated upload artifact for the CLI, not an authoring surface.
+
+When a task involves syncing or deploying the theme with the CLI, use the skill-style workflow in `docs/deploy-with-cli.md`.
+
+## Directory map
+
+```text
+src/
+  layout/
+    theme.liquid            Root storefront layout
+  templates/
+    index.json              Home page composition
+    product.json            Product page composition
+    collection.json         Collection page composition
+    list-collections.json   Collection index composition
+    page.json               Static page composition
+    blog.json               Blog index composition
+    article.json            Article composition
+    search.json             Search composition
+    404.json                Not-found composition
+  sections/
+    *.liquid                Theme sections with `{% schema %}`
+    header-group.json       Header section group definition
+    footer-group.json       Footer section group definition
+  snippets/
+    *.liquid                Reusable partials and icons
+  config/
+    settings_schema.json    Theme setting definitions for the editor
+    settings_data.json      Current values and global section state
+  assets/
+    theme.css               Committed storefront stylesheet
+    theme.js                Committed storefront script
+    *                       Other storefront assets
 ```
-src/                 — Source Liquid, TypeScript, CSS, and assets
-  layout/            — Layout Liquid + entry files (theme.liquid, theme.ts, theme.css)
-  templates/         — JSON template files defining section composition
-  sections/          — Section Liquid files with {% schema %} blocks
-  snippets/          — Reusable Liquid snippets
-  config/            — Theme settings (settings_data.json, settings_schema.json)
-  assets/            — Static assets (images, icons, fonts) flattened into dist/assets/
-  lib/               — Shared TypeScript and CSS modules (imported by entries, not served directly)
-    scripts/         — Imported TypeScript modules grouped by behavior
-      cart.ts        — Cart button, badge sync, checkout open
-      product-gallery.ts — Product image carousel with swipe and lightbox
-      hero-carousel.ts — Auto-play hero carousel with dots and keyboard nav
-      variant-selector.ts — Variant selection, price/stock updates, URL sync
-      quantity-input.ts — Quantity +/- buttons with clamping
-      add-to-cart.ts — Add to cart button state and SDK integration
-      tiendu-sdk.ts  — Storefront SDK bundled into the theme entry and exposes window.Tiendu
-    styles/          — Imported CSS modules grouped by component
-docs/                — Documentation for developers and agents
-specs/               — Migration plans and specifications
-dist/                — Build output (gitignored). This is what gets uploaded to Tiendu.
-tiendu.config.json   — Marks this as a built theme
-tsconfig.json        — TypeScript config (strict, noEmit, moduleResolution: bundler)
-package.json         — npm dependencies (typescript, tailwindcss)
-```
 
-## Build pipeline
+## Template model
 
-Entry points are discovered by convention from `src/layout/` and `src/templates/`:
+This theme is section-based.
 
-| Source file | Output bundle |
-|---|---|
-| `src/layout/theme.ts` | `dist/assets/layout-theme.bundle.js` |
-| `src/layout/theme.css` | `dist/assets/layout-theme.bundle.css` |
+Each page template in `src/templates/*.json` declares:
 
-Shared modules in `src/lib/` are bundled into the entries that import them. In practice, TypeScript lives in `src/lib/scripts/` and imported CSS lives in `src/lib/styles/`. They are not served as separate files.
+- `sections` — keyed instances of section types
+- `order` — render order of those section instances
 
-Liquid source files in `src/layout/`, `src/sections/`, `src/snippets/`, and `src/config/` are copied into `dist/` during the build. JSON templates in `src/templates/` are also copied. Static files in `src/assets/` are flattened into `dist/assets/`.
-
-## Sections architecture
-
-### JSON templates
-
-Templates are JSON files that define the sections on a page:
+Example:
 
 ```json
 {
@@ -74,113 +96,238 @@ Templates are JSON files that define the sections on a page:
     },
     "related": {
       "type": "related-products",
-      "settings": { "title": "Related products", "limit": 4 }
+      "settings": {
+        "title": "Tambien te puede interesar",
+        "limit": 4
+      }
     }
   },
   "order": ["main-product", "related"]
 }
 ```
 
-### Section schema
+Header and footer are not declared in page templates. They are rendered from:
 
-Each section `.liquid` file declares its settings and blocks via `{% schema %}`:
+- `src/sections/header-group.json`
+- `src/sections/footer-group.json`
+
+through `src/layout/theme.liquid`.
+
+## Section schema rules
+
+Every editable section must declare a `{% schema %}` block.
+
+Use schema for:
+
+- section name
+- section settings
+- blocks
+- block settings
+- presets and limits where needed
+
+The admin theme editor depends on schema metadata to:
+
+- list available sections
+- render setting inputs
+- add and remove blocks
+- reorder sections and blocks
+- update preview HTML live
+
+If a section should be editable in the customizer, its configuration must be represented in schema and template JSON, not hidden in hardcoded markup.
+
+## Global theme settings
+
+Theme-level settings are defined in `src/config/settings_schema.json` and consumed in `src/layout/theme.liquid`.
+
+Current important behavior:
+
+- color settings are mapped to CSS custom properties like `--color-primary`
+- typography settings are mapped to font-related CSS variables
+- the customizer can hot-update color variables without a full page reload
+
+When adding a new global setting:
+
+1. define it in `settings_schema.json`
+2. expose it in `theme.liquid` as a CSS variable or layout-level value if needed
+3. consume it from sections/snippets with `var(--...)` or normal Liquid access
+
+## Current Liquid object model
+
+Need the exact Liquid-facing schema, route availability, section setting resolution, or lazy/eager behavior? Read:
+
+- `.agents/skills/tiendu-theme-reference/references/liquid-objects.md`
+- `.agents/skills/tiendu-theme-reference/references/liquid-pagination.md`
+
+Prefer these objects and properties.
+
+### Core objects
+
+- `settings`
+- `section`
+- `product`
+- `collection`
+- `page`
+- `blogPost`
+- `blog`
+- `search`
+- `store`
+- `shop`
+- `request`
+- `paginate`
+
+### Current pagination/data surfaces
+
+- `collection.products`
+- `collection.products_count`
+- `product.related_products`
+- `product.related_products_count`
+- `search.results`
+- `search.results_count`
+- `blog.articles`
+- `blog.articles_count`
+
+Use them with `{% paginate %}` when rendering paginated lists.
+
+Examples:
 
 ```liquid
-{% schema %}
-{
-  "name": "Hero Banner",
-  "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Welcome" },
-    { "type": "url", "id": "cta_url", "label": "Button URL" }
-  ]
-}
-{% endschema %}
+{% paginate collection.products by section.settings.products_per_page %}
+  {% for product in collection.products %}
+    {% render 'product-card', product: product %}
+  {% endfor %}
+{% endpaginate %}
 ```
-
-Settings are accessed as `{{ section.settings.heading }}`. Blocks are accessed as `{{ section.blocks }}`.
-
-### Global sections
-
-Header and footer are global sections defined in `config/settings_data.json`:
-
-```json
-{
-  "current": { "color_primary": "#2563eb" },
-  "sections": {
-    "header": { "type": "header", "settings": { "show_search": true } },
-    "footer": { "type": "footer", "settings": { "copyright_text": "" } }
-  }
-}
-```
-
-They are rendered in the layout via `{% section 'header' %}` and `{% section 'footer' %}`.
-
-## TypeScript conventions
-
-- All source files are `.ts` with strict typing — no `any`.
-- Shared modules live in `src/lib/` and are imported by entry points.
-- The `tsconfig.json` uses `noEmit: true` — TypeScript is only used for type checking. esbuild handles compilation.
-- `moduleResolution: "bundler"` is set, so imports use extensionless relative paths (e.g., `from './cart'`) which esbuild resolves to the `.ts` files.
-- Run `npm run check` (or `npx tsc`) to type-check. Zero errors is the baseline.
-
-## Import conventions
-
-- TypeScript imports use extensionless relative paths: `import { initHeaderCart } from '../lib/scripts/cart'`
-- Static asset imports in TS use relative paths from `src/assets/`
-- Type-only imports use `import type`
-- CSS uses Tailwind directives: `@import 'tailwindcss';`
-- In Liquid, use `{{ 'filename' | asset_url }}` for all asset references.
-- Avoid hardcoded `/assets/...` paths in source files.
-
-## Referencing bundles in Liquid
 
 ```liquid
-{{ 'layout-theme.bundle.css' | asset_url | stylesheet_tag }}
-{{ 'layout-theme.bundle.js' | asset_url | script_tag }}
+{% paginate product.related_products by section.settings.limit %}
+  {% if product.related_products_count > 0 %}
+    {% render 'product-listing-grid', products: product.related_products %}
+  {% endif %}
+{% endpaginate %}
 ```
 
-## Tiendu SDK
-
-The Tiendu SDK lives in `src/lib/scripts/tiendu-sdk.ts`. It is bundled into `layout-theme.bundle.js`, defines `window.Tiendu` globally, and provides methods for: products, categories, pages, blog posts, cart, and analytics.
-
-In TypeScript, access it via the global:
-
-```typescript
-import { getTiendu } from './tiendu-sdk'
-
-const tiendu = getTiendu()
+```liquid
+{% paginate search.results by section.settings.results_per_page %}
+  {% if search.results_count > 0 %}
+    {% for product in search.results %}
+      {% render 'product-card', product: product %}
+    {% endfor %}
+  {% endif %}
+{% endpaginate %}
 ```
 
-## Custom Liquid tags
+## Search and blog behavior
 
-The Tiendu Liquid engine provides custom tags for fetching data server-side:
+The current search surface is product-only.
 
-- `{% products %}...{% endproducts %}` — fetch and iterate products
-- `{% categories %}...{% endcategories %}` — fetch and iterate categories
-- `{% pages %}...{% endpages %}` — fetch and iterate pages
-- `{% blog_posts %}...{% endblog_posts %}` — fetch and iterate blog posts
-- `{% paginate %}...{% endpaginate %}` — pagination wrapper
-- `{% section 'name' %}` — render a global section
-- `{% schema %}...{% endschema %}` — declare section settings (parsed, not rendered)
-- `{% metadata %}...{% endmetadata %}` — inject metadata
+Available search fields:
 
-## Custom Liquid filters
+- `search.terms`
+- `search.performed`
+- `search.results`
+- `search.results_count`
 
-- `asset_url` — resolve asset path with cache-busting version
-- `stylesheet_tag` — wrap URL in `<link>` tag
-- `script_tag` — wrap URL in `<script>` tag
-- `money` — format cents as currency using the store's currency
-- `handleize` / `url_safe` — slugify text
-- `escape_attr` — HTML attribute escaping
-- `json` — serialize value to JSON
-- `img_url` — image URL (with optional size)
-- `time_tag` — format date as `<time>` element
-- `default_pagination` — render pagination HTML
+The current blog surface exposes:
 
-## Important conventions
+- `blog.articles`
+- `blog.articles_count`
 
-- Product/category/blog/page content is server-rendered in Liquid. TypeScript hydrates interactive behaviors (cart, galleries, carousels, variant selectors).
-- All static files (SVGs, images, fonts) belong in `src/assets/`. They are flattened into `dist/assets/`.
-- Never create files directly in `dist/` — it is cleaned on every build.
-- Use `asset_url` in Liquid templates for all asset references.
-- `window.Tiendu` is provided by the bundled theme entry via `src/lib/scripts/tiendu-sdk.ts`.
+## Collection, page, and article pickers
+
+When a section needs merchant-selected resources, prefer schema setting types such as:
+
+- `collection`
+- `collection_list`
+- `page`
+- `page_list`
+- `article`
+- `article_list`
+- `product`
+- `product_list`
+
+Prefer editor-selected lists over runtime “fetch everything” patterns.
+
+Examples already in this theme:
+
+- `featured-categories.liquid` uses `collection_list`
+- `footer.liquid` uses `page_list`
+- `recent-posts.liquid` uses `article_list`
+
+## Legacy tags to avoid
+
+Do not introduce or rely on these legacy block tags:
+
+- `{% products %}`
+- `{% categories %}`
+- `{% pages %}`
+- `{% blog_posts %}`
+
+The supported theme direction is object-based Liquid access with `{% paginate %}` where needed.
+
+## Routing expectations
+
+This theme assumes Tiendu storefront routes in Spanish:
+
+- `/productos`
+- `/categorias`
+- `/paginas`
+- `/blog`
+- `/busqueda`
+
+When generating links manually, keep those route conventions.
+
+## URL and link conventions
+
+- Use the URL already provided by the resource when available: `product.url`, `collection.url`, `page.url`, `post.url`
+- Use `asset_url` for theme assets
+- Use `escape_attr` in attributes
+- Keep breadcrumb and “back to” query parameter behavior when a section already uses it
+
+## Styling rules
+
+- Prefer plain CSS edits in `src/assets/theme.css` or section markup classes
+- Reuse existing CSS variables from `theme.liquid`
+- Do not assume Tailwind is a supported authoring layer for new work
+- Do not introduce a new CSS build dependency
+- Keep styles compatible with live section replacement in the theme editor
+
+## Snippets and icons
+
+- Put reusable markup in `src/snippets/`
+- Keep snippet inputs explicit via `render` parameters
+- Icon snippets in this theme follow the `icon-*.liquid` naming pattern
+- See `docs/adding-icons.md` for the snippet-generation workflow
+
+## Layout behavior
+
+`src/layout/theme.liquid` is responsible for:
+
+- SEO meta tags
+- font loading
+- CSS variable injection
+- shared asset includes
+- rendering header/footer section groups
+- editor live-preview message handlers
+
+Do not move page-specific markup into the layout unless it truly applies to every page.
+
+## Editor compatibility
+
+The admin customizer updates sections by fetching server-rendered HTML and replacing a section root in the iframe.
+
+That means:
+
+- section markup should remain self-contained
+- interactive hooks should survive section re-rendering
+- settings should produce deterministic HTML for a given section instance
+- color settings should keep working through CSS custom properties
+
+## Safe editing checklist
+
+- Edit `src/`, not `dist/`
+- Keep schema and template JSON in sync
+- Prefer object-based Liquid over legacy tags
+- Preserve Spanish storefront routes
+- Use merchant-selectable settings for curated lists
+- Keep sections compatible with live preview replacement
+- Keep layout-level settings in `settings_schema.json` + `theme.liquid`

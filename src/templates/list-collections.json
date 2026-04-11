@@ -4,12 +4,15 @@
       "type": "breadcrumbs",
       "settings": {}
     },
-    "collection-list": {
-      "type": "collection-list",
+    "main-list-collections": {
+      "type": "main-list-collections",
       "settings": {
-        "title": "Categorias"
+        "title": "Colecciones",
+        "show_image": true,
+        "show_description": true,
+        "show_product_count": false
       }
     }
   },
-  "order": ["breadcrumbs", "collection-list"]
+  "order": ["breadcrumbs", "main-list-collections"]
 }

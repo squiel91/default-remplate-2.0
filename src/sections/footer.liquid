@@ -1,29 +1,85 @@
 <footer class="footer mt-12 border-t border-slate-200 bg-slate-50/80">
-  <div class="footer__inner container grid gap-10 py-10 md:grid-cols-3">
-    <div class="footer__brand space-y-2">
-      <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
-      {% if store.description %}
-        <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
-      {% endif %}
-    </div>
-    <div class="footer__links space-y-3">
-      <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Paginas</h4>
-      {% pages %}
-        <ul class="space-y-2 text-sm text-[var(--color-text-light)]">
-          {% for p in pages %}
-            <li><a href="{{ p.url }}">{{ p.title }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endpages %}
-    </div>
-    <div class="footer__contact space-y-2 text-sm">
-      {% if store.email_address %}
-        <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
-      {% endif %}
-      {% if store.whatsapp_number %}
-        <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
-      {% endif %}
-    </div>
+  <div class="footer__inner container py-10">
+    {% if section.blocks and section.blocks.size > 0 %}
+      <div class="footer__grid">
+        <div class="footer__column footer__brand">
+          <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
+          {% if store.description %}
+            <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
+          {% endif %}
+
+          {% if store.email_address or store.whatsapp_number %}
+            <div class="footer__meta text-sm text-[var(--color-text-light)]">
+              {% if store.email_address %}
+                <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
+              {% endif %}
+              {% if store.whatsapp_number %}
+                <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'text_column' %}
+              <div class="footer__column footer__column--text" {{ block.editor_attributes }}>
+                {% if block.settings.title != blank %}
+                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <div class="footer__richtext">{{ block.settings.text }}</div>
+                {% endif %}
+              </div>
+            {% when 'image_column' %}
+              <div class="footer__column footer__column--image" {{ block.editor_attributes }}>
+                {% if block.settings.title != blank %}
+                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
+                {% endif %}
+                {% if block.settings.image != blank %}
+                  <div class="footer__image-frame">
+                    <img
+                      class="footer__image"
+                      src="{{ block.settings.image | escape_attr }}"
+                      alt="{{ block.settings.image_alt | default: block.settings.title | default: store.name | escape_attr }}"
+                    >
+                  </div>
+                {% endif %}
+                {% if block.settings.caption != blank %}
+                  <p class="text-sm leading-6 text-[var(--color-text-light)]">{{ block.settings.caption }}</p>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="footer__grid footer__grid--legacy">
+        <div class="footer__column footer__brand">
+          <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
+          {% if store.description %}
+            <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
+          {% endif %}
+        </div>
+        <div class="footer__column footer__links">
+          <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Paginas</h4>
+          {% if section.settings.pages != blank and section.settings.pages.size > 0 %}
+            <ul class="space-y-2 text-sm text-[var(--color-text-light)]">
+              {% for p in section.settings.pages %}
+                <li><a href="{{ p.url }}">{{ p.title }}</a></li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        <div class="footer__column footer__contact text-sm text-[var(--color-text-light)]">
+          {% if store.email_address %}
+            <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
+          {% endif %}
+          {% if store.whatsapp_number %}
+            <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
   </div>
   <div class="footer__bottom container flex flex-col gap-2 border-t border-slate-200 py-4 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
     <p>&copy; {{ 'now' | date: '%Y' }} {{ store.name }}. Todos los derechos reservados.</p>
@@ -36,12 +92,70 @@
 {% schema %}
 {
   "name": "Pie de pagina",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "max_blocks": 8,
   "settings": [
+    {
+      "type": "page_list",
+      "id": "pages",
+      "label": "Paginas"
+    },
     {
       "type": "text",
       "id": "copyright_text",
       "label": "Texto adicional de copyright",
       "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_column",
+      "name": "Columna de texto",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Informacion"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Comparte una historia corta, horarios o detalles de contacto.</p>"
+        }
+      ]
+    },
+    {
+      "type": "image_column",
+      "name": "Columna con imagen",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Confianza"
+        },
+        {
+          "type": "image",
+          "id": "image",
+          "label": "Imagen"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Alt de imagen",
+          "default": "Imagen del footer"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Texto inferior",
+          "default": "Usa esta columna para mostrar un sello, medio de pago o imagen institucional."
+        }
+      ]
     }
   ]
 }

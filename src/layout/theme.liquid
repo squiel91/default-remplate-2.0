@@ -50,8 +50,8 @@
   {% endif %}
   <link rel="icon" href="{{ 'favicon.svg' | asset_url }}" type="image/svg+xml">
   <link rel="canonical" href="{{ canonical_url }}">
-  {{ 'layout-theme.bundle.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'layout-theme.bundle.js' | asset_url }}" defer></script>
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
   <style>
     {% if body_font %}
       {{ body_font | font_face: font_display: 'swap' }}
@@ -105,13 +105,13 @@
   {{ content_for_header }}
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)] antialiased">
-  {% section 'header' %}
+  {% sections 'header-group' %}
 
   <main>
     {{ content_for_layout }}
   </main>
 
-  {% section 'footer' %}
+  {% sections 'footer-group' %}
 
   {% if tracking_enabled %}
     {{ meta_tracking_script }}

@@ -1,0 +1,36 @@
+<section class="announcement-bar bg-[var(--color-primary)] text-white">
+  <div class="mx-auto flex min-h-10 items-center justify-center px-4 py-2 text-center text-sm md:px-6">
+    {% if section.settings.link != blank %}
+      <a
+        href="{{ section.settings.link }}"
+        class="font-medium text-white no-underline hover:opacity-90"
+      >
+        {{ section.settings.text | default: 'Barra de anuncios' }}
+      </a>
+    {% else %}
+      <p>{{ section.settings.text | default: 'Barra de anuncios' }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Barra de anuncios",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "default": "Envio gratis en compras mayores a $2000"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ]
+}
+{% endschema %}

@@ -3,9 +3,10 @@
     {% if section.settings.title != blank %}
       <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ section.settings.title }}</h2>
     {% endif %}
-    {% categories %}
+
+    {% if section.settings.collections != blank and section.settings.collections.size > 0 %}
       <div class="category-grid mt-6 grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-6">
-        {% for cat in categories %}
+        {% for cat in section.settings.collections %}
           {% assign category_href = cat.url | append: '?url-from=%2F&title-from=Inicio' %}
           <a href="{{ category_href }}" class="category-card block rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:no-underline hover:shadow-md">
             {% if cat.coverImage %}
@@ -18,19 +19,29 @@
           </a>
         {% endfor %}
       </div>
-    {% endcategories %}
+    {% else %}
+      <p class="mt-6 text-sm text-[var(--color-text-light)]">Selecciona las colecciones que quieres destacar en esta seccion.</p>
+    {% endif %}
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Categorias destacadas",
+  "name": "Colecciones destacadas",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
   "settings": [
     {
       "type": "text",
       "id": "title",
       "label": "Titulo",
       "default": "Nuestras categorias"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Colecciones"
     }
   ]
 }

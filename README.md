@@ -2,33 +2,42 @@
 
 The official starter theme for [Tiendu](https://tiendu.uy) storefronts.
 
-It ships with a modern sections-based architecture, TypeScript for interactive behavior, Tailwind CSS for styling, and the Tiendu CLI build pipeline for local development and deployment.
+This repository should be treated as a Liquid theme authored directly in `src/`.
 
-Check `AGENTS.md` for the full technical specification, or start with `docs/getting-started.md` if you want the complete development workflow.
+For agent and theme work, the supported surface is:
 
-## Requirements
+- Liquid layouts, sections, snippets, and templates
+- JSON template and settings files
+- plain CSS
+- static assets
 
-- Node.js 20+
-- [Tiendu CLI](https://www.npmjs.com/package/tiendu) installed globally: `npm install -g tiendu`
-- A Tiendu API key associated with your store, available in `Ajustes > General`
+Do not assume this theme should be extended as a build-first TypeScript or Tailwind theme.
 
-## Quick Start
+## Start Here
 
-```bash
-git clone git@github.com:squiel91/default-theme-2.0.git your-store-name
-cd your-store-name
-npm install
-tiendu init
-npm run dev
-```
+- `AGENTS.md` — theme-specific agent instructions
+- `.agents/skills/` — packaged repository skills for theme authoring, structure lookup, CLI deploy work, and icon snippet generation
 
-`tiendu init` connects the project to your store once. After that, `npm run dev` builds the theme, opens a preview workflow, and watches for changes.
+## Working Area
 
-## AI-Assisted Development
+Authoritative theme files live in `src/`.
 
-This starter is well suited for AI coding workflows.
+Do not edit generated theme output manually. The CLI may generate `dist/` as an upload artifact, but `src/` remains the authoring surface.
 
-For the best experience, pair it with the Tiendu official MCP for access to store admin resources, along with the relevant skills such as `tiendu-theme` and `tiendu-cli`.
+## Important Theme Direction
+
+This theme uses the current Tiendu object-based Liquid API.
+
+Prefer surfaces like:
+
+- `collection.products`
+- `product.related_products`
+- `search.results`
+- `blog.articles`
+
+and use `{% paginate %}` where pagination is needed.
+
+Avoid legacy custom data tags such as `{% products %}`, `{% categories %}`, `{% pages %}`, and `{% blog_posts %}`.
 
 ## License
 

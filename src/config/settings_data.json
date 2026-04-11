@@ -6,19 +6,5 @@
     "color_text_light": "#6b7280",
     "type_body_font": "roboto_n4",
     "type_heading_font": "google_sans_n4"
-  },
-  "sections": {
-    "header": {
-      "type": "header",
-      "settings": {
-        "show_search": true
-      }
-    },
-    "footer": {
-      "type": "footer",
-      "settings": {
-        "copyright_text": "hola"
-      }
-    }
   }
 }
