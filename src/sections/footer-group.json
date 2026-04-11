@@ -9,23 +9,53 @@
       },
       "blocks": {
         "footer-text-column": {
-          "type": "text_column",
+          "type": "text-column",
           "settings": {
             "title": "Visitanos",
             "text": "<p>Agrega una columna de texto para contar algo importante de la marca, horarios o zonas de entrega.</p>"
           }
         },
         "footer-image-column": {
-          "type": "image_column",
+          "type": "image-column",
           "settings": {
             "title": "Pagos",
             "image": "/assets/mercadopago.svg",
             "image_alt": "Mercado Pago",
             "caption": "Ejemplo de una columna con imagen dentro del mismo footer."
           }
+        },
+        "footer-collection-menu": {
+          "type": "collection-menu",
+          "settings": {
+            "title": "Colecciones"
+          },
+          "blocks": {
+            "footer-collection-item-all": {
+              "type": "collection-item",
+              "settings": {
+                "collection": "todas",
+                "label": "Todos los productos"
+              }
+            },
+            "footer-collection-item-food": {
+              "type": "collection-item",
+              "settings": {
+                "collection": "alimentos",
+                "label": "Alimentos"
+              }
+            }
+          },
+          "block_order": [
+            "footer-collection-item-all",
+            "footer-collection-item-food"
+          ]
         }
       },
-      "block_order": ["footer-text-column", "footer-image-column"]
+      "block_order": [
+        "footer-text-column",
+        "footer-image-column",
+        "footer-collection-menu"
+      ]
     }
   },
   "order": ["footer"]

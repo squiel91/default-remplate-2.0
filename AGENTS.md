@@ -5,6 +5,7 @@ This theme is a Tiendu Liquid theme authored directly in `src/`.
 For agent work, the supported authoring surface is:
 
 - Liquid templates and sections
+- Liquid theme blocks in `src/blocks/`
 - JSON template and section-group files
 - Theme settings JSON
 - Plain CSS
@@ -35,6 +36,7 @@ Authoritative theme files live under `src/`:
 - `src/layout/theme.liquid` — root layout, global CSS variables, shared assets, header/footer groups
 - `src/templates/*.json` — page composition per template
 - `src/sections/*.liquid` — editable theme sections
+- `src/blocks/*.liquid` — reusable theme blocks with their own `{% schema %}`
 - `src/sections/*-group.json` — global section groups like header/footer
 - `src/snippets/*.liquid` — reusable partials
 - `src/config/settings_schema.json` — theme setting definitions
@@ -65,6 +67,8 @@ src/
     *.liquid                Theme sections with `{% schema %}`
     header-group.json       Header section group definition
     footer-group.json       Footer section group definition
+  blocks/
+    *.liquid                Theme blocks rendered from section or block schemas
   snippets/
     *.liquid                Reusable partials and icons
   config/
@@ -121,9 +125,11 @@ Use schema for:
 
 - section name
 - section settings
-- blocks
-- block settings
+- allowed section block types
+- block settings when a block is defined inline
 - presets and limits where needed
+
+When a block has its own file in `src/blocks/*.liquid`, prefer keeping its settings and nested block definitions in that block file schema and reference it from a section with `{ "type": "block-type" }`.
 
 The admin theme editor depends on schema metadata to:
 
@@ -134,6 +140,25 @@ The admin theme editor depends on schema metadata to:
 - update preview HTML live
 
 If a section should be editable in the customizer, its configuration must be represented in schema and template JSON, not hidden in hardcoded markup.
+
+## Theme block model
+
+Tiendu now supports Shopify-style theme blocks stored in `src/blocks/*.liquid`.
+
+Prefer this model when:
+
+- a block should be reusable across multiple sections
+- a block is a nested container for child blocks
+- block schema would make a section schema too large or repetitive
+
+Current authoring rules:
+
+- sections can still define blocks inline
+- sections can also reference block files by type only, for example `{ "type": "collection_menu" }`
+- block files can define nested child blocks in their own `{% schema %}`
+- nested block instances are saved recursively in JSON using `blocks` plus `block_order`
+- render child blocks with `{% content_for 'blocks' %}` inside a section or block file
+- preserve `block.shopify_attributes` on the outer block element when possible
 
 ## Global theme settings
 

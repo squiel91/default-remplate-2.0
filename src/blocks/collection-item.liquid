@@ -1,0 +1,27 @@
+{% if block.settings.collection != blank %}
+  {% assign collection_link = block.settings.collection %}
+  {% assign collection_label = block.settings.label | default: collection_link.name %}
+  <li {{ block.shopify_attributes }}>
+    <a href="{{ collection_link.url }}">{{ collection_label }}</a>
+  </li>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Item de coleccion",
+  "tag": null,
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Coleccion"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": ""
+    }
+  ]
+}
+{% endschema %}

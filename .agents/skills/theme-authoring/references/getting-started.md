@@ -9,6 +9,7 @@ Work in these directories first:
 - `src/layout/`
 - `src/templates/`
 - `src/sections/`
+- `src/blocks/`
 - `src/snippets/`
 - `src/config/`
 - `src/assets/`
@@ -41,6 +42,23 @@ Edit or create a section in `src/sections/*.liquid`.
 Every editable section should expose its configuration through `{% schema %}`.
 
 That schema drives the Tiendu theme customizer.
+
+### Add or change a theme block
+
+Use `src/blocks/*.liquid` when a block should own its own markup and schema.
+
+Prefer block files when:
+
+- the same block type should be reusable in more than one section
+- a block is a nested container for child blocks
+- inline section block schema would become large or repetitive
+
+Block authoring rules:
+
+- declare the block schema in the block file
+- reference the block from a section or parent block schema with `{ "type": "block-type" }`
+- render child blocks with `{% content_for 'blocks' %}`
+- preserve `block.shopify_attributes` on the outer block element when practical
 
 ### Add or change global settings
 

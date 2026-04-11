@@ -1,6 +1,6 @@
 ---
 name: tiendu-theme-reference
-description: Use this skill when you need the `default-theme-2.0` file map, Liquid object shapes, route context, section setting resolution, pagination behavior, or route conventions.
+description: Use this skill when you need the `default-theme-2.0` file map, Liquid object shapes, route context, section or block setting resolution, pagination behavior, or route conventions.
 ---
 
 # Tiendu Theme Reference
@@ -16,7 +16,7 @@ Typical cases:
 - checking pagination support and the `paginate` object shape
 - checking route conventions
 - understanding settings/layout ownership
-</when-to-use>
+  </when-to-use>
 
 <workflow>
 1. Confirm whether the change belongs in layout, templates, sections, snippets, config, or assets.

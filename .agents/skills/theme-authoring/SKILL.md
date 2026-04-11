@@ -1,6 +1,6 @@
 ---
 name: theme-authoring
-description: Use this skill when making normal edits in `default-theme-2.0`, including templates, sections, snippets, theme settings, and CSS. It routes the agent to the standard authoring workflow and the current object-based Liquid model.
+description: Use this skill when making normal edits in `default-theme-2.0`, including templates, sections, theme blocks, snippets, theme settings, and CSS. It routes the agent to the standard authoring workflow and the current object-based Liquid model.
 ---
 
 # Theme Authoring
@@ -12,10 +12,11 @@ Typical cases:
 
 - editing templates
 - editing or adding sections
+- editing or adding theme blocks
 - editing snippets
 - editing theme settings
 - editing theme CSS
-</when-to-use>
+  </when-to-use>
 
 <workflow>
 1. Treat `src/` as the source of truth.

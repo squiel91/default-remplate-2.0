@@ -20,37 +20,7 @@
           {% endif %}
         </div>
 
-        {% for block in section.blocks %}
-          {% case block.type %}
-            {% when 'text_column' %}
-              <div class="footer__column footer__column--text" {{ block.editor_attributes }}>
-                {% if block.settings.title != blank %}
-                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
-                {% endif %}
-                {% if block.settings.text != blank %}
-                  <div class="footer__richtext">{{ block.settings.text }}</div>
-                {% endif %}
-              </div>
-            {% when 'image_column' %}
-              <div class="footer__column footer__column--image" {{ block.editor_attributes }}>
-                {% if block.settings.title != blank %}
-                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
-                {% endif %}
-                {% if block.settings.image != blank %}
-                  <div class="footer__image-frame">
-                    <img
-                      class="footer__image"
-                      src="{{ block.settings.image | escape_attr }}"
-                      alt="{{ block.settings.image_alt | default: block.settings.title | default: store.name | escape_attr }}"
-                    >
-                  </div>
-                {% endif %}
-                {% if block.settings.caption != blank %}
-                  <p class="text-sm leading-6 text-[var(--color-text-light)]">{{ block.settings.caption }}</p>
-                {% endif %}
-              </div>
-          {% endcase %}
-        {% endfor %}
+        {% content_for 'blocks' %}
       </div>
     {% else %}
       <div class="footer__grid footer__grid--legacy">
@@ -111,51 +81,13 @@
   ],
   "blocks": [
     {
-      "type": "text_column",
-      "name": "Columna de texto",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titulo",
-          "default": "Informacion"
-        },
-        {
-          "type": "richtext",
-          "id": "text",
-          "label": "Texto",
-          "default": "<p>Comparte una historia corta, horarios o detalles de contacto.</p>"
-        }
-      ]
+      "type": "text-column"
     },
     {
-      "type": "image_column",
-      "name": "Columna con imagen",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titulo",
-          "default": "Confianza"
-        },
-        {
-          "type": "image",
-          "id": "image",
-          "label": "Imagen"
-        },
-        {
-          "type": "text",
-          "id": "image_alt",
-          "label": "Alt de imagen",
-          "default": "Imagen del footer"
-        },
-        {
-          "type": "textarea",
-          "id": "caption",
-          "label": "Texto inferior",
-          "default": "Usa esta columna para mostrar un sello, medio de pago o imagen institucional."
-        }
-      ]
+      "type": "image-column"
+    },
+    {
+      "type": "collection-menu"
     }
   ]
 }

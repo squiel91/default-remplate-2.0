@@ -1,0 +1,31 @@
+<div class="footer__column footer__column--links" {{ block.shopify_attributes }}>
+  {% if block.settings.title != blank %}
+    <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
+  {% endif %}
+  {% if block.blocks and block.blocks.size > 0 %}
+    <ul class="space-y-2 text-sm text-[var(--color-text-light)]">
+      {% content_for 'blocks' %}
+    </ul>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Menu de colecciones",
+  "tag": null,
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "collection-item"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Colecciones"
+    }
+  ]
+}
+{% endschema %}

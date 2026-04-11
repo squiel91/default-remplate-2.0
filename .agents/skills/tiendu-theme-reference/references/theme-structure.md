@@ -33,6 +33,8 @@ default-theme-2.0/
 │   │   ├── *.liquid
 │   │   ├── header-group.json
 │   │   └── footer-group.json
+│   ├── blocks/
+│   │   └── *.liquid
 │   ├── snippets/
 │   │   └── *.liquid
 │   ├── config/
@@ -72,7 +74,18 @@ Each section should:
 
 - render its own markup
 - declare editable settings in `{% schema %}`
-- declare blocks when the merchant should compose repeated content
+- declare allowed block types when the merchant should compose repeated content
+
+### `src/blocks/`
+
+Theme blocks are reusable block types rendered from section or parent block schemas.
+
+Each block should:
+
+- render its own markup
+- declare editable settings in `{% schema %}`
+- declare nested child block types when it is a container
+- render children with `{% content_for 'blocks' %}` when it accepts nested blocks
 
 ### `src/snippets/`
 
@@ -126,6 +139,7 @@ The storefront follows Spanish routes:
 - Layout-wide globals, assets, and CSS variables belong in `src/layout/theme.liquid`.
 - Page composition belongs in `src/templates/*.json`.
 - Editable markup belongs in `src/sections/*.liquid` and should use `{% schema %}`.
+- Reusable block markup belongs in `src/blocks/*.liquid` and should use `{% schema %}`.
 - Reusable markup belongs in `src/snippets/*.liquid`.
 - Theme-level settings belong in `src/config/settings_schema.json` and `src/config/settings_data.json`.
 - Do not edit `dist/`; author in `src/`.

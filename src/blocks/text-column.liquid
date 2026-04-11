@@ -1,0 +1,29 @@
+<div class="footer__column footer__column--text" {{ block.shopify_attributes }}>
+  {% if block.settings.title != blank %}
+    <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
+  {% endif %}
+  {% if block.settings.text != blank %}
+    <div class="footer__richtext">{{ block.settings.text }}</div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Columna de texto",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Informacion"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Comparte una historia corta, horarios o detalles de contacto.</p>"
+    }
+  ]
+}
+{% endschema %}

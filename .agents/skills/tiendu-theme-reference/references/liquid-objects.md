@@ -28,19 +28,19 @@ Availability: `Always`
 
 ```ts
 {
-  id: number
-  name: string
-  description: string | null
-  hostname: string
-  url: string
-  country_code: string
+  id: number;
+  name: string;
+  description: string | null;
+  hostname: string;
+  url: string;
+  country_code: string;
   currency: {
-    code: string
-    name: string
-    symbol: string
+    code: string;
+    name: string;
+    symbol: string;
   }
-  whatsapp_number: string | null
-  email_address: string | null
+  whatsapp_number: string | null;
+  email_address: string | null;
 }
 ```
 
@@ -118,21 +118,33 @@ Font picker value shape:
 Availability: `Always`
 
 ```ts
-page_title: string
-page_description: string
-canonical_url: string
-tiendu_base_url: string
-tracking_enabled: boolean
-meta_tracking_script: string
-meta_tracking_noscript: string
-google_tracking_script: string
+page_title: string;
+page_description: string;
+canonical_url: string;
+tiendu_base_url: string;
+tracking_enabled: boolean;
+meta_tracking_script: string;
+meta_tracking_noscript: string;
+google_tracking_script: string;
 ```
 
 Layout-only globals:
 
 ```ts
-content_for_layout: string
-content_for_header: string
+content_for_layout: string;
+content_for_header: string;
+```
+
+Section and block rendering helper:
+
+```ts
+content_for_blocks?: string
+```
+
+Use it through:
+
+```liquid
+{% content_for 'blocks' %}
 ```
 
 ## Section context
@@ -151,7 +163,19 @@ Availability: `Section-only`
     type: string
     settings: Record<string, unknown>
     editor_attributes: string
+    shopify_attributes: string
+    block_order: string[]
+    blocks: Array<{
+      id: string
+      type: string
+      settings: Record<string, unknown>
+      editor_attributes: string
+      shopify_attributes: string
+      block_order: string[]
+      blocks: unknown[]
+    }>
   }>
+  block_order: string[]
 }
 ```
 
@@ -160,6 +184,9 @@ Pragmatic notes:
 - Section settings are merged with schema defaults before rendering.
 - Block settings are also merged with schema defaults.
 - `block.editor_attributes` is for the theme editor wrapper. Preserve it when a block root element already uses it.
+- `block.shopify_attributes` is an alias exposed for Shopify-style block files and should usually be preferred in `src/blocks/*.liquid`.
+- Nested block instances are available recursively on `block.blocks`.
+- Render child blocks with `{% content_for 'blocks' %}` inside a section or block file.
 
 ### Section setting resolution rules
 
@@ -185,13 +212,13 @@ These rules matter because setting-selected objects do not always behave like ro
 Availability: `Page-only` on `request.page_type == 'index'`
 
 ```ts
-current_page: number
-products_page_size: number
+current_page: number;
+products_page_size: number;
 search: {
-  terms: string
-  criteria: string | null
-  order: string | null
-  current_page: number
+  terms: string;
+  criteria: string | null;
+  order: string | null;
+  current_page: number;
 }
 ```
 
@@ -264,36 +291,38 @@ Backed by: synthetic helper object from `product-page.ts`
 ```ts
 {
   gallery_images: Array<{
-    id: number | null
-    url: string
-    alt: string
-  }>
+    id: number | null;
+    url: string;
+    alt: string;
+  }>;
   price: {
-    price_in_cents: number | null
-    compare_at_price_in_cents: number | null
-    price_is_from: boolean
-    compare_is_from: boolean
+    price_in_cents: number | null;
+    compare_at_price_in_cents: number | null;
+    price_is_from: boolean;
+    compare_is_from: boolean;
   }
   stock_note: {
-    tone: 'success' | 'warning' | 'error' | 'neutral'
-    message: string
+    tone: "success" | "warning" | "error" | "neutral";
+    message: string;
   }
-  requires_variant_selection: boolean
+  requires_variant_selection: boolean;
   default_attribute_values: Array<{
-    attribute_id: number
-    value_id: number
-  }>
-  quantity_hidden: boolean
-  quantity_disabled: boolean
-  quantity_max: number | null
+    attribute_id: number;
+    value_id: number;
+  }>;
+  quantity_hidden: boolean;
+  quantity_disabled: boolean;
+  quantity_max: number | null;
   add_to_cart: {
-    label: string
-    icon: string
-    disabled: boolean
+    label: string;
+    icon: string;
+    disabled: boolean;
   }
-  reviews: Array<ProductReview & {
-    relativeTime: string
-  }>
+  reviews: Array<
+    ProductReview & {
+      relativeTime: string;
+    }
+  >;
 }
 ```
 
@@ -519,15 +548,15 @@ template_suffix?: string | null
 
 ```ts
 {
-  id: number
-  attributeId: number
-  value: string
-  position: number
-  image: Image | null
-  color: string | null
-  note: string | null
-  updatedAt: string
-  createdAt: string
+  id: number;
+  attributeId: number;
+  value: string;
+  position: number;
+  image: Image | null;
+  color: string | null;
+  note: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 ```
 
@@ -588,24 +617,24 @@ template_suffix?: string | null
 ```ts
 type ContentBlock =
   | {
-      type: 'paragraph'
-      text: string
+      type: "paragraph";
+      text: string;
     }
   | {
-      type: 'heading'
-      level: 1 | 2 | 3
-      text: string
+      type: "heading";
+      level: 1 | 2 | 3;
+      text: string;
     }
   | {
-      type: 'image'
-      image: Image
-      size: 'small' | 'medium' | 'large' | 'full'
-      align: 'left' | 'center' | 'right'
+      type: "image";
+      image: Image;
+      size: "small" | "medium" | "large" | "full";
+      align: "left" | "center" | "right";
     }
   | {
-      type: 'html'
-      code: string
-    }
+      type: "html";
+      code: string;
+    };
 ```
 
 ## High-value caveats

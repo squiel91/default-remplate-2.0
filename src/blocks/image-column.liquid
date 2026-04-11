@@ -1,0 +1,49 @@
+<div class="footer__column footer__column--image" {{ block.shopify_attributes }}>
+  {% if block.settings.title != blank %}
+    <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{{ block.settings.title }}</h4>
+  {% endif %}
+  {% if block.settings.image != blank %}
+    <div class="footer__image-frame">
+      <img
+        class="footer__image"
+        src="{{ block.settings.image | escape_attr }}"
+        alt="{{ block.settings.image_alt | default: block.settings.title | default: store.name | escape_attr }}"
+      >
+    </div>
+  {% endif %}
+  {% if block.settings.caption != blank %}
+    <p class="text-sm leading-6 text-[var(--color-text-light)]">{{ block.settings.caption }}</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Columna con imagen",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Confianza"
+    },
+    {
+      "type": "image",
+      "id": "image",
+      "label": "Imagen"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Alt de imagen",
+      "default": "Imagen del footer"
+    },
+    {
+      "type": "textarea",
+      "id": "caption",
+      "label": "Texto inferior",
+      "default": "Usa esta columna para mostrar un sello, medio de pago o imagen institucional."
+    }
+  ]
+}
+{% endschema %}
