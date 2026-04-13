@@ -1,0 +1,22 @@
+{% if block.blocks and block.blocks.size > 0 %}
+  <ul class="tiendu-link-list" {{ block.shopify_attributes }}>
+    {% content_for 'blocks' %}
+  </ul>
+{% elsif design_mode or preview_mode %}
+  <ul class="tiendu-link-list" {{ block.shopify_attributes }}>
+    <li class="tiendu-link-list__placeholder">[ENLACES]</li>
+  </ul>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Lista de enlaces",
+  "tag": null,
+  "max_blocks": 12,
+  "blocks": [
+    {
+      "type": "link-item"
+    }
+  ]
+}
+{% endschema %}

@@ -32,7 +32,7 @@
         {% if section.settings.cta_text != blank and section.settings.cta_url != blank %}
           <a
             href="{{ section.settings.cta_url }}"
-            class="mt-6 inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline transition hover:opacity-90"
+            class="mt-6 inline-flex items-center justify-center bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline transition hover:opacity-90 radius-button"
           >
             {{ section.settings.cta_text | escape }}
           </a>

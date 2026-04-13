@@ -5,15 +5,15 @@
   {% endif %}
   <a href="{{ product_breadcrumb_href }}" class="group block bg-white no-underline transition hover:opacity-90">
     {% if product.coverImage %}
-      <img class="product-card__image aspect-square w-full bg-slate-100 object-cover" src="{{ product.coverImage.url }}" alt="{{ product.coverImage.alt | default: product.title }}" loading="lazy">
+      <img class="product-card__image radius-card-media aspect-square w-full bg-slate-100 object-cover" src="{{ product.coverImage.url }}" alt="{{ product.coverImage.alt | default: product.title }}" loading="lazy">
     {% else %}
-      <div class="product-card__image product-card__image--placeholder aspect-square w-full bg-slate-100"></div>
+      <div class="product-card__image product-card__image--placeholder radius-card-media aspect-square w-full bg-slate-100"></div>
     {% endif %}
     <div class="mt-2 flex flex-col gap-1">
       <h3 class="product-card__name text-base font-semibold text-slate-950">{{ product.title }}</h3>
       {% render 'product-rating', rating: product.averageRating, reviews_count: product.reviewsQuantity %}
       {% if product.basePriceInCents %}
-        <p class="product-card__price text-sm font-semibold text-[var(--color-primary)]">{{ product.basePriceInCents | money }}</p>
+        <p class="product-card__price text-sm font-semibold text-[var(--color-text)]">{{ product.basePriceInCents | money }}</p>
       {% endif %}
     </div>
   </a>

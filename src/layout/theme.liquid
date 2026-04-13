@@ -28,6 +28,28 @@
   {% assign heading_font = settings.type_heading_font | default: body_font %}
   {% assign heading_font_bold = heading_font | font_modify: 'weight', 'bold' | default: heading_font %}
   {% assign heading_font_italic = heading_font | font_modify: 'style', 'italic' %}
+  {% assign theme_rounding = settings.theme_rounding | default: 'mediano' %}
+  {% assign radius_button = 'var(--radius-xl)' %}
+  {% assign radius_card_media = 'var(--radius-2xl)' %}
+  {% assign radius_gallery_media = 'var(--radius-3xl)' %}
+  {% case theme_rounding %}
+    {% when 'ninguno' %}
+      {% assign radius_button = '0px' %}
+      {% assign radius_card_media = '0px' %}
+      {% assign radius_gallery_media = '0px' %}
+    {% when 'pequeno' %}
+      {% assign radius_button = 'var(--radius-lg)' %}
+      {% assign radius_card_media = 'var(--radius-xl)' %}
+      {% assign radius_gallery_media = 'var(--radius-2xl)' %}
+    {% when 'grande' %}
+      {% assign radius_button = '14px' %}
+      {% assign radius_card_media = 'var(--radius-3xl)' %}
+      {% assign radius_gallery_media = '1.75rem' %}
+    {% when 'extra_grande' %}
+      {% assign radius_button = 'var(--radius-2xl)' %}
+      {% assign radius_card_media = '1.75rem' %}
+      {% assign radius_gallery_media = '2.25rem' %}
+  {% endcase %}
   {% if body_font and body_font.system? != true %}
     <link
       rel="preload"
@@ -83,6 +105,9 @@
       --color-background: {{ settings.color_background | default: '#ffffff' }};
       --color-text: {{ settings.color_text | default: '#1a1a1a' }};
       --color-text-light: {{ settings.color_text_light | default: '#6b7280' }};
+      --theme-radius-button: {{ radius_button }};
+      --theme-radius-card-media: {{ radius_card_media }};
+      --theme-radius-gallery-media: {{ radius_gallery_media }};
     }
 
     body {
@@ -118,23 +143,124 @@
     {{ meta_tracking_noscript }}
     {{ google_tracking_script }}
   {% endif %}
+  <style>
+    .tiendu-editor-hovered {
+      outline: 2px solid blue;
+      outline-offset: -2px;
+    }
+
+    .tiendu-editor-selected {
+      outline: 2px solid blue;
+      outline-offset: -2px;
+    }
+  </style>
   <script>
-    window.addEventListener('message', function(e) {
-      if (!e.data || e.data.type !== 'section:update') return;
-      var el = document.querySelector('[data-section-id="' + e.data.sectionId + '"]');
-      if (!el) return;
-      el.outerHTML = e.data.html;
-      window.dispatchEvent(new CustomEvent('tiendu:section-updated', {
-        detail: { sectionId: e.data.sectionId }
-      }));
-    });
-    window.addEventListener('message', function(e) {
-      if (!e.data || e.data.type !== 'theme:css-vars') return;
-      var vars = e.data.vars;
-      for (var key in vars) {
-        document.documentElement.style.setProperty(key, vars[key]);
+    (function() {
+      var hoverTarget = null;
+      var selectedTarget = null;
+      var hoverElement = null;
+      var selectedElement = null;
+
+      function targetsMatch(a, b) {
+        return !!a && !!b && a.targetType === b.targetType && a.id === b.id && a.sectionId === b.sectionId;
       }
-    });
+
+      function locateTarget(target) {
+        if (!target || !target.id) return null;
+
+        if (target.targetType === 'section') {
+          return document.querySelector('[data-section-id="' + target.id + '"]');
+        }
+
+        if (target.targetType === 'block') {
+          var blockSelector = '[data-tiendu-block-id="' + target.id + '"]';
+          if (target.sectionId) {
+            var sectionRoot = document.querySelector('[data-section-id="' + target.sectionId + '"]');
+            if (sectionRoot) return sectionRoot.querySelector(blockSelector);
+          }
+          return document.querySelector(blockSelector);
+        }
+
+        return null;
+      }
+
+      function removeHighlightClass(element, className) {
+        if (!element) return;
+        element.classList.remove(className);
+      }
+
+      function addHighlightClass(element, className) {
+        if (!element) return;
+        element.classList.add(className);
+      }
+
+      function updateHighlightState() {
+        var nextSelectedElement = locateTarget(selectedTarget);
+        var nextHoverElement = locateTarget(hoverTarget);
+
+        if (selectedElement && selectedElement !== nextSelectedElement) {
+          removeHighlightClass(selectedElement, 'tiendu-editor-selected');
+        }
+
+        if (
+          hoverElement &&
+          (hoverElement !== nextHoverElement || hoverElement === nextSelectedElement)
+        ) {
+          removeHighlightClass(hoverElement, 'tiendu-editor-hovered');
+        }
+
+        if (nextSelectedElement) {
+          addHighlightClass(nextSelectedElement, 'tiendu-editor-selected');
+        }
+
+        if (nextHoverElement && !targetsMatch(hoverTarget, selectedTarget)) {
+          addHighlightClass(nextHoverElement, 'tiendu-editor-hovered');
+        }
+
+        if (nextHoverElement && nextHoverElement === nextSelectedElement) {
+          removeHighlightClass(nextHoverElement, 'tiendu-editor-hovered');
+        }
+
+        selectedElement = nextSelectedElement;
+        hoverElement = targetsMatch(hoverTarget, selectedTarget)
+          ? null
+          : nextHoverElement;
+      }
+
+      window.addEventListener('message', function(e) {
+        if (!e.data) return;
+
+        if (e.data.type === 'section:update') {
+          var el = document.querySelector('[data-section-id="' + e.data.sectionId + '"]');
+          if (!el) return;
+          el.outerHTML = e.data.html;
+          window.dispatchEvent(new CustomEvent('tiendu:section-updated', {
+            detail: { sectionId: e.data.sectionId }
+          }));
+          updateHighlightState();
+          return;
+        }
+
+        if (e.data.type === 'theme:css-vars') {
+          var vars = e.data.vars;
+          for (var key in vars) {
+            document.documentElement.style.setProperty(key, vars[key]);
+          }
+          return;
+        }
+
+        if (e.data.type === 'editor:highlight-targets') {
+          hoverTarget = e.data.hoverTarget || null;
+          selectedTarget = e.data.selectedTarget || null;
+          updateHighlightState();
+        }
+      });
+
+      window.addEventListener('resize', updateHighlightState);
+      window.addEventListener('scroll', updateHighlightState, { passive: true });
+      window.addEventListener('tiendu:section-updated', updateHighlightState);
+      document.addEventListener('DOMContentLoaded', updateHighlightState);
+    })();
   </script>
 </body>
 </html>

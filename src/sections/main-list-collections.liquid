@@ -10,7 +10,7 @@
 	          {% assign collection_href = collection.url | append: '?url-from=%2Fcategorias&title-from=Colecciones' %}
 	          <a href="{{ collection_href }}" class="collection-card block rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:no-underline hover:shadow-md">
             {% if section.settings.show_image and collection.coverImage %}
-              <img class="mb-4 aspect-square w-full rounded-2xl object-cover" src="{{ collection.coverImage.url }}" alt="{{ collection.coverImage.alt | default: collection.name }}" loading="lazy">
+              <img class="collection-card__image radius-card-media mb-4 aspect-square w-full object-cover" src="{{ collection.coverImage.url }}" alt="{{ collection.coverImage.alt | default: collection.name }}" loading="lazy">
             {% endif %}
 
             <h2 class="text-lg font-semibold text-slate-950">{{ collection.name }}</h2>

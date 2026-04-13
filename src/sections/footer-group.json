@@ -4,58 +4,185 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {
-        "copyright_text": "hola"
-      },
+      "settings": {},
       "blocks": {
-        "footer-text-column": {
-          "type": "text-column",
+        "footer-shell": {
+          "type": "layout-group",
           "settings": {
-            "title": "Visitanos",
-            "text": "<p>Agrega una columna de texto para contar algo importante de la marca, horarios o zonas de entrega.</p>"
-          }
-        },
-        "footer-image-column": {
-          "type": "image-column",
-          "settings": {
-            "title": "Pagos",
-            "image": "/assets/mercadopago.svg",
-            "image_alt": "Mercado Pago",
-            "caption": "Ejemplo de una columna con imagen dentro del mismo footer."
-          }
-        },
-        "footer-collection-menu": {
-          "type": "collection-menu",
-          "settings": {
-            "title": "Colecciones"
+            "direction_mobile": "column",
+            "direction_tablet": "column",
+            "direction_desktop": "column",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "flex-start",
+            "justify_desktop": "flex-start"
           },
           "blocks": {
-            "footer-collection-item-all": {
-              "type": "collection-item",
+            "footer-grid": {
+              "type": "layout-grid",
               "settings": {
-                "collection": "todas",
-                "label": "Todos los productos"
-              }
+                "columns_mobile": "1",
+                "columns_tablet": "2",
+                "columns_desktop": "3"
+              },
+              "blocks": {
+                "brand-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "brand-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "[NOMBRE DE TU TIENDA]",
+                        "tag": "h2",
+                        "size": "medium"
+                      }
+                    },
+                    "brand-text": {
+                      "type": "text",
+                      "settings": {
+                        "content": "<p>[DESCRIPCION CORTA DE LA TIENDA]</p>"
+                      }
+                    }
+                  },
+                  "block_order": ["brand-heading", "brand-text"]
+                },
+                "categories-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "categories-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Categorias",
+                        "tag": "h3",
+                        "size": "small"
+                      }
+                    },
+                    "categories-links": {
+                      "type": "link-list",
+                      "blocks": {
+                        "category-1": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 1]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "category-2": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 2]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "category-3": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 3]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        }
+                      },
+                      "block_order": ["category-1", "category-2", "category-3"]
+                    }
+                  },
+                  "block_order": ["categories-heading", "categories-links"]
+                },
+                "info-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "info-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Informacion",
+                        "tag": "h3",
+                        "size": "small"
+                      }
+                    },
+                    "info-links": {
+                      "type": "link-list",
+                      "blocks": {
+                        "info-1": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[ENLACE 1]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "info-2": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[ENLACE 2]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        }
+                      },
+                      "block_order": ["info-1", "info-2"]
+                    }
+                  },
+                  "block_order": ["info-heading", "info-links"]
+                }
+              },
+              "block_order": ["brand-column", "categories-column", "info-column"]
             },
-            "footer-collection-item-food": {
-              "type": "collection-item",
+            "footer-bottom": {
+              "type": "layout-group",
               "settings": {
-                "collection": "alimentos",
-                "label": "Alimentos"
-              }
+                "direction_mobile": "column",
+                "direction_tablet": "row",
+                "direction_desktop": "row",
+                "justify_mobile": "flex-start",
+                "justify_tablet": "space-between",
+                "justify_desktop": "space-between"
+              },
+              "blocks": {
+                "bottom-left": {
+                  "type": "text",
+                  "settings": {
+                    "content": "<p>© 2026 [NOMBRE DE TU TIENDA]. Todos los derechos reservados.</p>"
+                  }
+                },
+                "bottom-right": {
+                  "type": "text",
+                  "settings": {
+                    "content": "<p>Tienda co-creada junto a Tiendu.</p>"
+                  }
+                }
+              },
+              "block_order": ["bottom-left", "bottom-right"]
             }
           },
-          "block_order": [
-            "footer-collection-item-all",
-            "footer-collection-item-food"
-          ]
+          "block_order": ["footer-grid", "footer-bottom"]
         }
       },
-      "block_order": [
-        "footer-text-column",
-        "footer-image-column",
-        "footer-collection-menu"
-      ]
+      "block_order": ["footer-shell"]
     }
   },
   "order": ["footer"]

@@ -1,0 +1,22 @@
+<a href="{{ block.settings.url }}" class="tiendu-block-button inline-flex items-center justify-center bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90 radius-button" {{ block.shopify_attributes }}>
+  {{ block.settings.label }}
+</a>
+
+{% schema %}
+{
+  "name": "Boton",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "Boton"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Enlace"
+    }
+  ]
+}
+{% endschema %}

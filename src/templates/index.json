@@ -3,11 +3,34 @@
     "hero": {
       "type": "hero-banner",
       "settings": {
-        "heading": "Bienvenido a nuestra tienda vegana Ni muuu",
-        "subheading": "Explora nuestra seleccion de productos",
-        "cta_text": "Ver productos",
-        "cta_url": "/categorias"
-      }
+        "desktop_image": "",
+        "mobile_image": "",
+        "image_alt": "Banner principal"
+      },
+      "blocks": {
+        "heading_r9h1w4": {
+          "type": "heading",
+          "settings": {
+            "text": "Bienvenido a nuestra tienda vegana Ni muuu",
+            "tag": "h1",
+            "size": "large"
+          }
+        },
+        "text_5p0jht": {
+          "type": "text",
+          "settings": {
+            "content": "<p>Explora nuestra seleccion de productos</p>"
+          }
+        },
+        "button_u6c2gn": {
+          "type": "button",
+          "settings": {
+            "label": "Ver productos",
+            "url": "/categorias"
+          }
+        }
+      },
+      "block_order": ["heading_r9h1w4", "text_5p0jht", "button_u6c2gn"]
     },
     "categories": {
       "type": "featured-categories",
@@ -19,16 +42,72 @@
       "type": "featured-category",
       "settings": {
         "collection": "alimentos",
-        "title": "",
         "limit": 4
-      }
+      },
+      "blocks": {
+        "group": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "row",
+            "direction_desktop": "row",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "space-between",
+            "justify_desktop": "space-between"
+          },
+          "blocks": {
+            "title": {
+              "type": "_featured-collection-title",
+              "settings": {
+                "source": "collection_name",
+                "tag": "h2",
+                "size": "medium"
+              }
+            },
+            "button": {
+              "type": "_featured-collection-button",
+              "settings": {
+                "label": "Ver mas",
+                "url_source": "collection_url",
+                "style": "button"
+              }
+            }
+          },
+          "block_order": ["title", "button"]
+        }
+      },
+      "block_order": ["group"]
     },
     "product-list-manual": {
       "type": "product-list-manual",
       "settings": {
-        "title": "Productos elegidos",
         "products": []
-      }
+      },
+      "blocks": {
+        "group": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "row",
+            "direction_desktop": "row",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "space-between",
+            "justify_desktop": "space-between"
+          },
+          "blocks": {
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Productos elegidos",
+                "tag": "h2",
+                "size": "medium"
+              }
+            }
+          },
+          "block_order": ["title"]
+        }
+      },
+      "block_order": ["group"]
     },
     "recent-posts": {
       "type": "recent-posts",
@@ -47,11 +126,34 @@
     "hero-banner_g9ejae": {
       "type": "hero-banner",
       "settings": {
-        "heading": "Bienvenido a nuestra tienda",
-        "subheading": "Explora nuestra seleccion de productos",
-        "cta_text": "Ver productos",
-        "cta_url": "/categorias"
-      }
+        "desktop_image": "",
+        "mobile_image": "",
+        "image_alt": "Banner principal secundario"
+      },
+      "blocks": {
+        "heading_jw8xgf": {
+          "type": "heading",
+          "settings": {
+            "text": "Bienvenido a nuestra tienda",
+            "tag": "h2",
+            "size": "large"
+          }
+        },
+        "text_zv7zj8": {
+          "type": "text",
+          "settings": {
+            "content": "<p>Explora nuestra seleccion de productos</p>"
+          }
+        },
+        "button_p6xw17": {
+          "type": "button",
+          "settings": {
+            "label": "Ver productos",
+            "url": "/categorias"
+          }
+        }
+      },
+      "block_order": ["heading_jw8xgf", "text_zv7zj8", "button_p6xw17"]
     },
     "hero-carousel_ql959f": {
       "type": "hero-carousel",
@@ -60,22 +162,66 @@
         "slide_oo4kgu": {
           "type": "slide",
           "settings": {
-            "title": "Nueva coleccion",
-            "subtitle": "Descubre los productos destacados de la temporada.",
-            "button_text": "Comprar ahora",
-            "button_url": "/categorias/todas",
-            "image": "http://cnd.localhost:4000/images/1773666413663-alicantequeso-webp.webp"
-          }
+            "desktop_image": "http://cnd.localhost:4000/images/1773666413663-alicantequeso-webp.webp",
+            "mobile_image": "http://cnd.localhost:4000/images/1773666413663-alicantequeso-webp.webp",
+            "image_alt": "Nueva coleccion"
+          },
+          "blocks": {
+            "heading_x3j5be": {
+              "type": "heading",
+              "settings": {
+                "text": "Nueva coleccion",
+                "tag": "h1",
+                "size": "large"
+              }
+            },
+            "text_ou84bx": {
+              "type": "text",
+              "settings": {
+                "content": "<p>Descubre los productos destacados de la temporada.</p>"
+              }
+            },
+            "button_1mr0n1": {
+              "type": "button",
+              "settings": {
+                "label": "Comprar ahora",
+                "url": "/categorias/todas"
+              }
+            }
+          },
+          "block_order": ["heading_x3j5be", "text_ou84bx", "button_1mr0n1"]
         },
         "slide_99ku1v": {
           "type": "slide",
           "settings": {
-            "title": "Alimento de quesooo",
-            "subtitle": "Descubre los productos destacados de la temporada.",
-            "button_text": "Comprar ahora",
-            "button_url": "/categorias/todas",
-            "image": "http://cnd.localhost:4000/images/1773666409963-protectorsolarvn-606cae15-79b9-4835-9824-f81870305581-webp.webp"
-          }
+            "desktop_image": "http://cnd.localhost:4000/images/1773666409963-protectorsolarvn-606cae15-79b9-4835-9824-f81870305581-webp.webp",
+            "mobile_image": "http://cnd.localhost:4000/images/1773666409963-protectorsolarvn-606cae15-79b9-4835-9824-f81870305581-webp.webp",
+            "image_alt": "Alimento de quesooo"
+          },
+          "blocks": {
+            "heading_n2df7a": {
+              "type": "heading",
+              "settings": {
+                "text": "Alimento de quesooo",
+                "tag": "h2",
+                "size": "large"
+              }
+            },
+            "text_7qsl9e": {
+              "type": "text",
+              "settings": {
+                "content": "<p>Descubre los productos destacados de la temporada.</p>"
+              }
+            },
+            "button_5qyxw2": {
+              "type": "button",
+              "settings": {
+                "label": "Comprar ahora",
+                "url": "/categorias/todas"
+              }
+            }
+          },
+          "block_order": ["heading_n2df7a", "text_7qsl9e", "button_5qyxw2"]
         }
       },
       "block_order": ["slide_oo4kgu", "slide_99ku1v"]

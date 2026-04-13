@@ -4,57 +4,7 @@
       <div class="h-full min-h-[inherit]">
         <div class="h-full min-h-[inherit] select-none overflow-hidden [touch-action:pan-y]" data-role="viewport" data-dragging="false">
           <div class="flex h-full min-h-[inherit] will-change-transform" data-role="track">
-            {% for block in section.blocks %}
-              {% assign mobile_image = block.settings.mobile_image | default: block.settings.image | default: block.settings.desktop_image %}
-              {% assign desktop_image = block.settings.desktop_image | default: block.settings.image %}
-              {% assign image_alt = block.settings.image_alt | default: block.settings.title | default: shop.name %}
-
-              <article class="relative block h-full min-h-[520px] basis-full shrink-0 md:min-h-[620px]" data-hero-carousel-slide aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}" {{ block.editor_attributes }}>
-                {% if mobile_image != blank or desktop_image != blank %}
-                  <picture class="absolute inset-0 block h-full w-full">
-                    {% if desktop_image != blank and desktop_image != mobile_image %}
-                      <source media="(min-width: 768px)" srcset="{{ desktop_image | escape_attr }}">
-                    {% endif %}
-                    <img
-                      class="h-full w-full select-none object-cover"
-                      src="{{ mobile_image | escape_attr }}"
-                      alt="{{ image_alt | escape_attr }}"
-                      draggable="false"
-                      loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                      decoding="async"
-                    >
-                  </picture>
-                {% else %}
-                  <div class="tiendu-carousel__hero-media--empty absolute inset-0" aria-hidden="true"></div>
-                {% endif %}
-
-                <div class="tiendu-carousel__hero-overlay absolute inset-0"></div>
-
-                <div class="absolute inset-0 z-[1] w-full">
-                  <div class="container flex h-full items-end">
-                    <div class="flex w-full max-w-[760px] flex-col items-start gap-5 px-0 pb-20 text-white md:pb-24 max-md:max-w-full max-md:px-6 max-md:pb-16">
-                      {% if block.settings.title != blank %}
-                        {% if forloop.first %}
-                          <h1 class="max-w-[18ch] font-serif text-4xl font-normal leading-[1.16] tracking-normal text-white md:text-[clamp(1.75rem,4.4vw,3.25rem)] max-md:max-w-none">{{ block.settings.title }}</h1>
-                        {% else %}
-                          <h2 class="max-w-[18ch] font-serif text-4xl font-normal leading-[1.16] tracking-normal text-white md:text-[clamp(1.75rem,4.4vw,3.25rem)] max-md:max-w-none">{{ block.settings.title }}</h2>
-                        {% endif %}
-                      {% endif %}
-
-                      {% if block.settings.subtitle != blank %}
-                        <p class="max-w-[56ch] text-base leading-7 text-white/95 md:text-[1.2rem] md:leading-[1.6] max-md:max-w-none">{{ block.settings.subtitle }}</p>
-                      {% endif %}
-
-                      {% if block.settings.button_text != blank and block.settings.button_url != blank %}
-                        <a href="{{ block.settings.button_url }}" class="tiendu-carousel__hero-cta inline-flex items-center justify-center self-start rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">
-                          {{ block.settings.button_text }}
-                        </a>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              </article>
-            {% endfor %}
+            {% content_for 'blocks' %}
           </div>
         </div>
 
@@ -95,54 +45,7 @@
   "settings": [],
   "blocks": [
     {
-      "type": "slide",
-      "name": "Slide",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titulo",
-          "default": "Nueva coleccion"
-        },
-        {
-          "type": "textarea",
-          "id": "subtitle",
-          "label": "Subtitulo",
-          "default": "Descubre los productos destacados de la temporada."
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Texto del boton",
-          "default": "Comprar ahora"
-        },
-        {
-          "type": "url",
-          "id": "button_url",
-          "label": "URL del boton",
-          "default": "/categorias/todas"
-        },
-        {
-          "type": "image",
-          "id": "image",
-          "label": "Imagen"
-        },
-        {
-          "type": "image",
-          "id": "desktop_image",
-          "label": "Imagen desktop"
-        },
-        {
-          "type": "image",
-          "id": "mobile_image",
-          "label": "Imagen mobile"
-        },
-        {
-          "type": "text",
-          "id": "image_alt",
-          "label": "Alt de imagen"
-        }
-      ]
+      "type": "slide"
     }
   ]
 }

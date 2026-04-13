@@ -75,6 +75,7 @@ Each section should:
 - render its own markup
 - declare editable settings in `{% schema %}`
 - declare allowed block types when the merchant should compose repeated content
+- declare `presets` when the section should start with a default block tree
 
 ### `src/blocks/`
 
@@ -85,7 +86,13 @@ Each block should:
 - render its own markup
 - declare editable settings in `{% schema %}`
 - declare nested child block types when it is a container
+- declare `presets` when it should start with default child blocks or settings when inserted
 - render children with `{% content_for 'blocks' %}` when it accepts nested blocks
+
+Preferred authoring pattern in this theme:
+
+- use normal preset-created blocks rendered through `{% content_for 'blocks' %}` when merchants should be able to add, remove, reorder, and edit them freely
+- reserve fixed-placement rendering for cases that truly require a dedicated slot
 
 ### `src/snippets/`
 
@@ -114,6 +121,11 @@ Prefer schema types such as:
 - `article_list`
 - `product`
 - `product_list`
+
+Important behavior:
+
+- single-resource settings like `collection` and `product` resolve to usable resource objects/drops in Liquid
+- blocks rendered inside a section can read those resolved values through `section.settings.*`
 
 ## Patterns to avoid
 

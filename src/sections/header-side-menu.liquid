@@ -1,57 +1,59 @@
+<aside class="header-drawer" id="header-side-menu-drawer" data-header-drawer-root data-open="false" aria-hidden="true" aria-label="Menu lateral" role="dialog" aria-modal="true">
+  <button type="button" class="header-drawer__backdrop" data-header-drawer-close aria-label="Cerrar menu lateral"></button>
+
+  <div class="header-drawer__panel">
+    <div class="header-drawer__header">
+      <a href="/" class="header-drawer__logo">{{ store.name }}</a>
+
+      <button type="button" class="header__action-button header-drawer__close radius-button" data-header-drawer-close aria-label="Cerrar menu lateral">
+        <span class="header__action-icon" aria-hidden="true">{% render 'icon-x', size: 18 %}</span>
+      </button>
+    </div>
+
+    <div class="header-drawer__body">
+      {% if section.blocks and section.blocks.size > 0 %}
+        {% content_for 'blocks' %}
+      {% elsif design_mode or preview_mode %}
+        <p class="header-drawer__empty">Agrega bloques para construir el menu lateral.</p>
+      {% endif %}
+    </div>
+  </div>
+</aside>
+
+{% schema %}
 {
-  "type": "header",
-  "name": "Header group",
-  "sections": {
-    "header": {
-      "type": "header",
-      "settings": {
-        "show_search": true,
-        "sticky_header": true,
-        "enable_side_menu": true,
-        "vertical_padding": 18
-      },
-      "blocks": {
-        "header-navigation": {
-          "type": "layout-group",
-          "settings": {
-            "direction_mobile": "column",
-            "direction_tablet": "row",
-            "direction_desktop": "row",
-            "justify_mobile": "flex-start",
-            "justify_tablet": "flex-start",
-            "justify_desktop": "flex-start"
-          },
-          "blocks": {
-            "menu_item_home": {
-              "type": "menu_item",
-              "settings": {
-                "title": "Inicio",
-                "url": "/"
-              }
-            },
-            "menu_item_collections": {
-              "type": "menu_item",
-              "settings": {
-                "title": "Colecciones",
-                "url": "tiendu://collections/todas"
-              }
-            },
-            "menu_item_blog": {
-              "type": "menu_item",
-              "settings": {
-                "title": "Blog",
-                "url": "/blog"
-              }
-            }
-          },
-          "block_order": ["menu_item_home", "menu_item_collections", "menu_item_blog"]
-        }
-      },
-      "block_order": ["header-navigation"]
+  "name": "Menu lateral",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "max_blocks": 8,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "menu_item"
     },
-    "header_side_menu": {
-      "type": "header-side-menu",
-      "settings": {},
+    {
+      "type": "layout-group"
+    },
+    {
+      "type": "layout-grid"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link-list"
+    },
+    {
+      "type": "button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Menu lateral",
       "blocks": {
         "drawer-shell": {
           "type": "layout-group",
@@ -108,6 +110,6 @@
       },
       "block_order": ["drawer-shell"]
     }
-  },
-  "order": ["header", "header_side_menu"]
+  ]
 }
+{% endschema %}

@@ -1,0 +1,29 @@
+{%- comment -%}
+  Lucide icon: menu
+  Usage:
+    {% render 'icon-menu' %}
+    {% render 'icon-menu', size: 32 %}
+    {% render 'icon-menu', class: 'custom-class' %}
+    {% render 'icon-menu', stroke_width: 1.5 %}
+{%- endcomment -%}
+{%- liquid
+  assign size = size | default: 24
+  assign stroke_width = stroke_width | default: 2
+-%}
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="{{ size }}"
+  height="{{ size }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="{{ stroke_width }}"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-menu{% if class %} {{ class }}{% endif %}"
+  aria-hidden="true"
+>
+  <path d="M4 12h16" />
+  <path d="M4 6h16" />
+  <path d="M4 18h16" />
+</svg>

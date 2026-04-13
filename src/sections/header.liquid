@@ -1,32 +1,57 @@
-<header class="header sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
-  <div class="header__inner container flex flex-wrap items-center gap-4 py-4 md:gap-6">
-    <a href="/" class="header__logo text-xl font-bold tracking-tight no-underline">{{ store.name }}</a>
-    <nav class="header__nav flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-light)] md:gap-5">
-      {% for block in section.blocks %}
-        {% if block.type == 'menu_item' and block.settings.title != blank and block.settings.url != blank %}
-          <a href="{{ block.settings.url }}" {{ block.editor_attributes }}>{{ block.settings.title }}</a>
-        {% endif %}
-      {% endfor %}
-    </nav>
-    {% if section.settings.show_search %}
-      <button type="button" class="header__search-trigger ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-50 disabled:cursor-wait disabled:opacity-70" aria-label="Abrir buscador" data-header-search-trigger>
-        <span class="inline-flex h-4 w-4 items-center justify-center" aria-hidden="true" data-search-button-icon="search">
-          {% render 'icon-search', size: 16 %}
-        </span>
-        <span class="inline-flex h-4 w-4 items-center justify-center animate-spin" aria-hidden="true" data-search-button-icon="loader" hidden>
-          {% render 'icon-loader-circle', size: 16 %}
-        </span>
-      </button>
+{% assign header_padding_y = section.settings.vertical_padding | default: 18 %}
+{% assign header_padding_y_desktop = header_padding_y | plus: 4 %}
+
+<header class="header{% if section.settings.sticky_header %} header--sticky{% endif %}" style="--header-padding-y: {{ header_padding_y }}px; --header-padding-y-desktop: {{ header_padding_y_desktop }}px;">
+  <div class="header__inner container">
+    <div class="header__brand">
+      {% if section.settings.enable_side_menu %}
+        <button
+          type="button"
+          class="header__action-button header__drawer-toggle radius-button"
+          data-header-drawer-toggle
+          aria-label="Abrir menu lateral"
+          aria-controls="header-side-menu-drawer"
+          aria-expanded="false"
+        >
+          <span class="header__action-icon" aria-hidden="true">{% render 'icon-menu', size: 18 %}</span>
+        </button>
+      {% endif %}
+
+      <a href="/" class="header__logo">{{ store.name }}</a>
+    </div>
+
+    {% if section.blocks and section.blocks.size > 0 %}
+      <div class="header__content">
+        {% content_for 'blocks' %}
+      </div>
+    {% elsif design_mode or preview_mode %}
+      <div class="header__content header__content--empty">
+        <p class="header__empty">Agrega bloques para construir la navegacion del header.</p>
+      </div>
     {% endif %}
-    <button type="button" class="header__cart-button relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 transition hover:bg-slate-50" id="open-cart-button" aria-label="Abrir carrito">
-      <span class="header__cart-icon inline-flex h-[18px] w-[18px]" aria-hidden="true" data-cart-button-icon="shopping-bag">
-        {% render 'icon-shopping-bag', size: 18 %}
-      </span>
-      <span class="header__cart-icon inline-flex h-[18px] w-[18px] animate-spin" aria-hidden="true" data-cart-button-icon="loader" hidden>
-        {% render 'icon-loader-circle', size: 18 %}
-      </span>
-      <span class="header__cart-count absolute -top-1 -right-1 inline-flex min-h-[1.25rem] min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--color-primary)] px-1 text-[0.6875rem] leading-none text-white" id="cart-quantity-badge" hidden>0</span>
-    </button>
+
+    <div class="header__actions">
+      {% if section.settings.show_search %}
+        <button type="button" class="header__action-button header__search-trigger radius-button" aria-label="Abrir buscador" data-header-search-trigger>
+          <span class="header__action-icon" aria-hidden="true" data-search-button-icon="search">
+            {% render 'icon-search', size: 16 %}
+          </span>
+          <span class="header__action-icon animate-spin" aria-hidden="true" data-search-button-icon="loader" hidden>
+            {% render 'icon-loader-circle', size: 16 %}
+          </span>
+        </button>
+      {% endif %}
+
+      <button type="button" class="header__action-button header__cart-button radius-button" id="open-cart-button" aria-label="Abrir carrito">
+        <span class="header__action-icon" aria-hidden="true" data-cart-button-icon="shopping-bag">
+          {% render 'icon-shopping-bag', size: 18 %}
+        </span>
+        <span class="header__action-icon animate-spin" aria-hidden="true" data-cart-button-icon="loader" hidden>
+          {% render 'icon-loader-circle', size: 18 %}
+        </span>
+        <span class="header__cart-count" id="cart-quantity-badge" hidden>0</span>
+      </button>
+    </div>
   </div>
 </header>
 
@@ -43,25 +68,94 @@
       "id": "show_search",
       "label": "Mostrar buscador",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Fijar arriba",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_side_menu",
+      "label": "Mostrar menu lateral",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "vertical_padding",
+      "label": "Padding vertical",
+      "min": 12,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
     }
   ],
   "blocks": [
     {
-      "type": "menu_item",
-      "name": "Link del menu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titulo",
-          "default": "Link"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Destino"
+      "type": "menu_item"
+    },
+    {
+      "type": "layout-group"
+    },
+    {
+      "type": "layout-grid"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link-list"
+    },
+    {
+      "type": "button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barra de navegacion",
+      "blocks": {
+        "header-navigation": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "row",
+            "direction_desktop": "row",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "flex-start",
+            "justify_desktop": "flex-start"
+          },
+          "blocks": {
+            "menu_item_home": {
+              "type": "menu_item",
+              "settings": {
+                "title": "Inicio",
+                "url": "/"
+              }
+            },
+            "menu_item_collections": {
+              "type": "menu_item",
+              "settings": {
+                "title": "Colecciones",
+                "url": "tiendu://collections/todas"
+              }
+            },
+            "menu_item_blog": {
+              "type": "menu_item",
+              "settings": {
+                "title": "Blog",
+                "url": "/blog"
+              }
+            }
+          },
+          "block_order": ["menu_item_home", "menu_item_collections", "menu_item_blog"]
         }
-      ]
+      },
+      "block_order": ["header-navigation"]
     }
   ]
 }

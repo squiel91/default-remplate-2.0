@@ -1,0 +1,69 @@
+{% assign collection = section.settings.collection %}
+{% assign source = block.settings.source | default: 'collection_name' %}
+{% assign resolved_text = '' %}
+{% assign tag = block.settings.tag | default: 'h2' %}
+{% assign size_class = 'text-3xl md:text-4xl' %}
+
+{% if block.settings.size == 'small' %}
+  {% assign size_class = 'text-2xl md:text-3xl' %}
+{% elsif block.settings.size == 'large' %}
+  {% assign size_class = 'text-4xl md:text-5xl' %}
+{% endif %}
+
+{% if block.settings.custom_text != blank %}
+  {% assign resolved_text = block.settings.custom_text %}
+{% elsif source == 'collection_name' and collection and collection.name != blank %}
+  {% assign resolved_text = collection.name %}
+{% else %}
+  {% assign resolved_text = 'Titulo de coleccion' %}
+{% endif %}
+
+<{{ tag }} class="tiendu-block-heading tiendu-block-heading--{{ block.settings.size | default: 'medium' }} {{ size_class }} font-semibold tracking-tight text-slate-950" {{ block.shopify_attributes }}>
+  {{ resolved_text | escape }}
+</{{ tag }}>
+
+{% schema %}
+{
+  "name": "Titulo de coleccion",
+  "settings": [
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Fuente",
+      "options": [
+        { "value": "collection_name", "label": "Nombre de coleccion" },
+        { "value": "custom_text", "label": "Texto personalizado" }
+      ],
+      "default": "collection_name"
+    },
+    {
+      "type": "text",
+      "id": "custom_text",
+      "label": "Texto personalizado"
+    },
+    {
+      "type": "select",
+      "id": "tag",
+      "label": "Etiqueta HTML",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Tamano",
+      "options": [
+        { "value": "small", "label": "Pequeno" },
+        { "value": "medium", "label": "Mediano" },
+        { "value": "large", "label": "Grande" }
+      ],
+      "default": "medium"
+    }
+  ]
+}
+{% endschema %}

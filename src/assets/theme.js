@@ -283,6 +283,78 @@ var syncCartQuantity = async () => {
     setCartQuantity(0);
   }
 };
+var activeHeaderDrawerCleanup = null;
+var initHeaderDrawer = () => {
+  activeHeaderDrawerCleanup?.();
+  activeHeaderDrawerCleanup = null;
+  document.body.classList.remove("header-drawer-open");
+  const drawer = document.querySelector("[data-header-drawer-root]");
+  const triggers = Array.from(document.querySelectorAll("[data-header-drawer-toggle]"));
+  if (!(drawer instanceof HTMLElement)) {
+    for (const trigger of triggers) {
+      trigger.setAttribute("aria-expanded", "false");
+    }
+    return;
+  }
+  const closeButtons = Array.from(drawer.querySelectorAll("[data-header-drawer-close]"));
+  const syncState = (open) => {
+    drawer.dataset.open = open ? "true" : "false";
+    drawer.setAttribute("aria-hidden", open ? "false" : "true");
+    document.body.classList.toggle("header-drawer-open", open);
+    for (const trigger of triggers) {
+      trigger.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+  };
+  const closeDrawer = () => {
+    syncState(false);
+  };
+  const openDrawer = () => {
+    syncState(true);
+    const firstCloseButton = closeButtons.find((button) => button instanceof HTMLElement);
+    firstCloseButton?.focus();
+  };
+  const toggleDrawer = () => {
+    if (drawer.dataset.open === "true") {
+      closeDrawer();
+      return;
+    }
+    openDrawer();
+  };
+  const onTriggerClick = (event) => {
+    event.preventDefault();
+    toggleDrawer();
+  };
+  const onCloseClick = (event) => {
+    event.preventDefault();
+    closeDrawer();
+  };
+  const onKeydown = (event) => {
+    if (event.key === "Escape" && drawer.dataset.open === "true") {
+      closeDrawer();
+    }
+  };
+  for (const trigger of triggers) {
+    trigger.addEventListener("click", onTriggerClick);
+  }
+  for (const closeButton of closeButtons) {
+    closeButton.addEventListener("click", onCloseClick);
+  }
+  document.addEventListener("keydown", onKeydown);
+  syncState(false);
+  activeHeaderDrawerCleanup = () => {
+    for (const trigger of triggers) {
+      trigger.removeEventListener("click", onTriggerClick);
+      trigger.setAttribute("aria-expanded", "false");
+    }
+    for (const closeButton of closeButtons) {
+      closeButton.removeEventListener("click", onCloseClick);
+    }
+    document.removeEventListener("keydown", onKeydown);
+    document.body.classList.remove("header-drawer-open");
+    drawer.dataset.open = "false";
+    drawer.setAttribute("aria-hidden", "true");
+  };
+};
 var initHeaderCart = () => {
   const button = document.getElementById("open-cart-button");
   if (!(button instanceof HTMLButtonElement)) return;
@@ -1456,6 +1528,7 @@ var initVariantSelectors = (scope = document) => {
 
 var initializeTheme = (scope = document) => {
   initBreadcrumbContexts(scope);
+  initHeaderDrawer();
   initHeaderCart();
   initHeaderSearch();
   initHeroCarousels(scope);

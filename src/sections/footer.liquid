@@ -1,60 +1,13 @@
-<footer class="footer mt-12 border-t border-slate-200 bg-slate-50/80">
-  <div class="footer__inner container py-10">
+<footer class="footer border-t border-slate-200 bg-slate-50/80">
+  <div class="container">
     {% if section.blocks and section.blocks.size > 0 %}
-      <div class="footer__grid">
-        <div class="footer__column footer__brand">
-          <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
-          {% if store.description %}
-            <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
-          {% endif %}
-
-          {% if store.email_address or store.whatsapp_number %}
-            <div class="footer__meta text-sm text-[var(--color-text-light)]">
-              {% if store.email_address %}
-                <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
-              {% endif %}
-              {% if store.whatsapp_number %}
-                <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
-              {% endif %}
-            </div>
-          {% endif %}
-        </div>
-
+      <div class="footer__content py-12 md:py-14">
         {% content_for 'blocks' %}
       </div>
-    {% else %}
-      <div class="footer__grid footer__grid--legacy">
-        <div class="footer__column footer__brand">
-          <strong class="text-lg font-semibold tracking-tight">{{ store.name }}</strong>
-          {% if store.description %}
-            <p class="max-w-sm text-sm leading-6 text-[var(--color-text-light)]">{{ store.description }}</p>
-          {% endif %}
-        </div>
-        <div class="footer__column footer__links">
-          <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Paginas</h4>
-          {% if section.settings.pages != blank and section.settings.pages.size > 0 %}
-            <ul class="space-y-2 text-sm text-[var(--color-text-light)]">
-              {% for p in section.settings.pages %}
-                <li><a href="{{ p.url }}">{{ p.title }}</a></li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
-        <div class="footer__column footer__contact text-sm text-[var(--color-text-light)]">
-          {% if store.email_address %}
-            <p><a href="mailto:{{ store.email_address }}">{{ store.email_address }}</a></p>
-          {% endif %}
-          {% if store.whatsapp_number %}
-            <p><a href="https://wa.me/{{ store.whatsapp_number }}">WhatsApp</a></p>
-          {% endif %}
-        </div>
+    {% elsif design_mode or preview_mode %}
+      <div class="footer__content footer__content--empty py-12 md:py-14">
+        <p class="footer__empty">Agrega bloques para construir el pie de pagina.</p>
       </div>
-    {% endif %}
-  </div>
-  <div class="footer__bottom container flex flex-col gap-2 border-t border-slate-200 py-4 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-    <p>&copy; {{ 'now' | date: '%Y' }} {{ store.name }}. Todos los derechos reservados.</p>
-    {% if section.settings.copyright_text != blank %}
-      <p>{{ section.settings.copyright_text }}</p>
     {% endif %}
   </div>
 </footer>
@@ -65,29 +18,209 @@
   "enabled_on": {
     "groups": ["footer"]
   },
-  "max_blocks": 8,
-  "settings": [
-    {
-      "type": "page_list",
-      "id": "pages",
-      "label": "Paginas"
-    },
-    {
-      "type": "text",
-      "id": "copyright_text",
-      "label": "Texto adicional de copyright",
-      "default": ""
-    }
-  ],
+  "max_blocks": 6,
+  "settings": [],
   "blocks": [
     {
-      "type": "text-column"
+      "type": "layout-group"
     },
     {
-      "type": "image-column"
+      "type": "layout-grid"
     },
     {
-      "type": "collection-menu"
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "link-list"
+    },
+    {
+      "type": "button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pie de pagina",
+      "blocks": {
+        "footer-shell": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "column",
+            "direction_desktop": "column",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "flex-start",
+            "justify_desktop": "flex-start"
+          },
+          "blocks": {
+            "footer-grid": {
+              "type": "layout-grid",
+              "settings": {
+                "columns_mobile": "1",
+                "columns_tablet": "2",
+                "columns_desktop": "3"
+              },
+              "blocks": {
+                "brand-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "brand-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "[NOMBRE DE TU TIENDA]",
+                        "tag": "h2",
+                        "size": "medium"
+                      }
+                    },
+                    "brand-text": {
+                      "type": "text",
+                      "settings": {
+                        "content": "<p>[DESCRIPCION CORTA DE LA TIENDA]</p>"
+                      }
+                    }
+                  },
+                  "block_order": ["brand-heading", "brand-text"]
+                },
+                "categories-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "categories-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Categorias",
+                        "tag": "h3",
+                        "size": "small"
+                      }
+                    },
+                    "categories-links": {
+                      "type": "link-list",
+                      "blocks": {
+                        "category-1": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 1]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "category-2": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 2]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "category-3": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[CATEGORIA 3]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        }
+                      },
+                      "block_order": ["category-1", "category-2", "category-3"]
+                    }
+                  },
+                  "block_order": ["categories-heading", "categories-links"]
+                },
+                "info-column": {
+                  "type": "layout-group",
+                  "settings": {
+                    "direction_mobile": "column",
+                    "direction_tablet": "column",
+                    "direction_desktop": "column",
+                    "justify_mobile": "flex-start",
+                    "justify_tablet": "flex-start",
+                    "justify_desktop": "flex-start"
+                  },
+                  "blocks": {
+                    "info-heading": {
+                      "type": "heading",
+                      "settings": {
+                        "text": "Informacion",
+                        "tag": "h3",
+                        "size": "small"
+                      }
+                    },
+                    "info-links": {
+                      "type": "link-list",
+                      "blocks": {
+                        "info-1": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[ENLACE 1]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        },
+                        "info-2": {
+                          "type": "link-item",
+                          "settings": {
+                            "text": "[ENLACE 2]",
+                            "url": "",
+                            "open_in_new_page": false
+                          }
+                        }
+                      },
+                      "block_order": ["info-1", "info-2"]
+                    }
+                  },
+                  "block_order": ["info-heading", "info-links"]
+                }
+              },
+              "block_order": ["brand-column", "categories-column", "info-column"]
+            },
+            "footer-bottom": {
+              "type": "layout-group",
+              "settings": {
+                "direction_mobile": "column",
+                "direction_tablet": "row",
+                "direction_desktop": "row",
+                "justify_mobile": "flex-start",
+                "justify_tablet": "space-between",
+                "justify_desktop": "space-between"
+              },
+              "blocks": {
+                "bottom-left": {
+                  "type": "text",
+                  "settings": {
+                    "content": "<p>© 2026 [NOMBRE DE TU TIENDA]. Todos los derechos reservados.</p>"
+                  }
+                },
+                "bottom-right": {
+                  "type": "text",
+                  "settings": {
+                    "content": "<p>Tienda co-creada junto a Tiendu.</p>"
+                  }
+                }
+              },
+              "block_order": ["bottom-left", "bottom-right"]
+            }
+          },
+          "block_order": ["footer-grid", "footer-bottom"]
+        }
+      },
+      "block_order": ["footer-shell"]
     }
   ]
 }

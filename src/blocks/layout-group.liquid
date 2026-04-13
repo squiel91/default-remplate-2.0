@@ -1,0 +1,121 @@
+{% assign direction_mobile = block.settings.direction_mobile | default: 'column' %}
+{% assign direction_tablet = block.settings.direction_tablet | default: direction_mobile %}
+{% assign direction_desktop = block.settings.direction_desktop | default: direction_tablet %}
+{% assign justify_mobile = block.settings.justify_mobile | default: 'flex-start' %}
+{% assign justify_tablet = block.settings.justify_tablet | default: justify_mobile %}
+{% assign justify_desktop = block.settings.justify_desktop | default: justify_tablet %}
+
+<div
+  class="tiendu-layout-group"
+  style="--layout-group-direction-mobile: {{ direction_mobile }}; --layout-group-direction-tablet: {{ direction_tablet }}; --layout-group-direction-desktop: {{ direction_desktop }}; --layout-group-justify-mobile: {{ justify_mobile }}; --layout-group-justify-tablet: {{ justify_tablet }}; --layout-group-justify-desktop: {{ justify_desktop }};"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Grupo de layout",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction_mobile",
+      "label": "Direccion mobile",
+      "options": [
+        { "value": "column", "label": "Columna" },
+        { "value": "row", "label": "Fila" }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "direction_tablet",
+      "label": "Direccion tablet",
+      "options": [
+        { "value": "column", "label": "Columna" },
+        { "value": "row", "label": "Fila" }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "direction_desktop",
+      "label": "Direccion desktop",
+      "options": [
+        { "value": "column", "label": "Columna" },
+        { "value": "row", "label": "Fila" }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "justify_mobile",
+      "label": "Distribucion mobile",
+      "options": [
+        { "value": "flex-start", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "space-between", "label": "Space between" },
+        { "value": "space-around", "label": "Space around" },
+        { "value": "flex-end", "label": "Derecha" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "select",
+      "id": "justify_tablet",
+      "label": "Distribucion tablet",
+      "options": [
+        { "value": "flex-start", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "space-between", "label": "Space between" },
+        { "value": "space-around", "label": "Space around" },
+        { "value": "flex-end", "label": "Derecha" }
+      ],
+      "default": "space-between"
+    },
+    {
+      "type": "select",
+      "id": "justify_desktop",
+      "label": "Distribucion desktop",
+      "options": [
+        { "value": "flex-start", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "space-between", "label": "Space between" },
+        { "value": "space-around", "label": "Space around" },
+        { "value": "flex-end", "label": "Derecha" }
+      ],
+      "default": "space-between"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "menu_item"
+    },
+    {
+      "type": "layout-group"
+    },
+    {
+      "type": "layout-grid"
+    },
+    {
+      "type": "link-list"
+    },
+    {
+      "type": "_featured-collection-title"
+    },
+    {
+      "type": "_featured-collection-button"
+    }
+  ]
+}
+{% endschema %}

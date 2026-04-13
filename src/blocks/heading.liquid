@@ -1,0 +1,53 @@
+{% assign tag = block.settings.tag | default: 'h2' %}
+{% assign size_class = 'text-4xl md:text-5xl' %}
+{% if block.settings.size == 'small' %}
+  {% assign size_class = 'text-2xl md:text-3xl' %}
+{% elsif block.settings.size == 'medium' %}
+  {% assign size_class = 'text-3xl md:text-4xl' %}
+{% elsif block.settings.size == 'large' %}
+  {% assign size_class = 'text-4xl md:text-5xl' %}
+{% elsif block.settings.size == 'xlarge' %}
+  {% assign size_class = 'text-5xl md:text-6xl' %}
+{% endif %}
+
+<{{ tag }} class="tiendu-block-heading tiendu-block-heading--{{ block.settings.size | default: 'large' }} {{ size_class }} mb-4 font-semibold tracking-tight text-slate-950" {{ block.shopify_attributes }}>
+  {{ block.settings.text }}
+</{{ tag }}>
+
+{% schema %}
+{
+  "name": "Titulo",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "default": "Titulo"
+    },
+    {
+      "type": "select",
+      "id": "tag",
+      "label": "Etiqueta HTML",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Tamano",
+      "options": [
+        { "value": "small", "label": "Pequeño" },
+        { "value": "medium", "label": "Mediano" },
+        { "value": "large", "label": "Grande" },
+        { "value": "xlarge", "label": "Extra Grande" }
+      ],
+      "default": "large"
+    }
+  ]
+}
+{% endschema %}

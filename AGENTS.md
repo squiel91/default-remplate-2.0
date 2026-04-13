@@ -129,6 +129,13 @@ Use schema for:
 - block settings when a block is defined inline
 - presets and limits where needed
 
+Prefer schema `presets` when a section or block should be inserted with a default child-block composition.
+
+Example use cases:
+
+- a product-list section that should start with a layout container plus title/button blocks
+- a reusable layout block that should start with a default heading child block
+
 When a block has its own file in `src/blocks/*.liquid`, prefer keeping its settings and nested block definitions in that block file schema and reference it from a section with `{ "type": "block-type" }`.
 
 The admin theme editor depends on schema metadata to:
@@ -156,9 +163,16 @@ Current authoring rules:
 - sections can still define blocks inline
 - sections can also reference block files by type only, for example `{ "type": "collection_menu" }`
 - block files can define nested child blocks in their own `{% schema %}`
+- sections and blocks can define `presets` to seed default nested block trees
 - nested block instances are saved recursively in JSON using `blocks` plus `block_order`
 - render child blocks with `{% content_for 'blocks' %}` inside a section or block file
 - preserve `block.shopify_attributes` on the outer block element when possible
+
+Preferred pattern in this theme:
+
+- use normal preset-created blocks rendered through `{% content_for 'blocks' %}` when the merchant should be able to add, remove, reorder, and edit them freely
+- reserve fixed, explicitly rendered block slots for cases that truly require fixed placement
+- when a specialized block only needs access to a merchant-selected resource, prefer reading `section.settings.<resource>` rather than re-fetching the resource manually
 
 ## Global theme settings
 
@@ -271,6 +285,14 @@ When a section needs merchant-selected resources, prefer schema setting types su
 - `product_list`
 
 Prefer editor-selected lists over runtime “fetch everything” patterns.
+
+Current important behavior:
+
+- `section.settings.collection` resolves to a collection object/drop, not just a handle string
+- `section.settings.product` resolves to a product object
+- list pickers such as `product_list` resolve to ordered arrays of resource objects
+
+That means blocks rendered inside the section can safely read resolved values like `section.settings.collection.name` or `section.settings.collection.url`.
 
 Examples already in this theme:
 

@@ -1,0 +1,91 @@
+{% assign template_mobile = 'repeat(auto-fit, minmax(min(100%, 14rem), 1fr))' %}
+{% assign template_tablet = template_mobile %}
+{% assign template_desktop = template_mobile %}
+
+{% if block.settings.columns_mobile != blank %}
+  {% assign template_mobile = 'repeat(' | append: block.settings.columns_mobile | append: ', minmax(0, 1fr))' %}
+{% endif %}
+
+{% if block.settings.columns_tablet != blank %}
+  {% assign template_tablet = 'repeat(' | append: block.settings.columns_tablet | append: ', minmax(0, 1fr))' %}
+{% endif %}
+
+{% if block.settings.columns_desktop != blank %}
+  {% assign template_desktop = 'repeat(' | append: block.settings.columns_desktop | append: ', minmax(0, 1fr))' %}
+{% endif %}
+
+<div
+  class="tiendu-layout-grid"
+  style="--layout-grid-template-mobile: {{ template_mobile }}; --layout-grid-template-tablet: {{ template_tablet }}; --layout-grid-template-desktop: {{ template_desktop }};"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Grid de layout",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columnas mobile",
+      "options": [
+        { "value": "", "label": "Auto" },
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "columns_tablet",
+      "label": "Columnas tablet",
+      "options": [
+        { "value": "", "label": "Auto" },
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columnas desktop",
+      "options": [
+        { "value": "", "label": "Auto" },
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "layout-group"
+    },
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "menu_item"
+    },
+    {
+      "type": "link-list"
+    }
+  ]
+}
+{% endschema %}

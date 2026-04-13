@@ -23,13 +23,16 @@ Typical cases:
 2. Make the smallest correct Liquid / JSON / CSS change.
 3. Keep schema, template JSON, and rendered markup aligned.
 4. Prefer object-based Liquid surfaces over legacy custom fetch tags.
-5. Preserve customizer compatibility and Spanish route conventions.
+5. Prefer schema `presets` when a section or block should start with a default child-block composition.
+6. Prefer normal preset-created blocks rendered with `{% content_for 'blocks' %}` when the merchant should be able to add, remove, reorder, and edit them freely.
+7. Preserve customizer compatibility and Spanish route conventions.
 </workflow>
 
 <quality-bar>
 - No manual `dist/` edits.
 - No new TypeScript, Tailwind, or build-first assumptions for normal theme work.
 - Prefer merchant-selectable schema settings for curated content.
+- Prefer reading resolved values from `section.settings.<resource>` inside blocks over re-fetching those resources manually.
 - Keep section output deterministic for the editor preview.
 </quality-bar>
 

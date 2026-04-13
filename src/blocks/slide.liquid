@@ -1,0 +1,72 @@
+{% assign mobile_image = block.settings.mobile_image | default: block.settings.desktop_image %}
+{% assign desktop_image = block.settings.desktop_image | default: block.settings.mobile_image %}
+{% assign image_alt = block.settings.image_alt | default: store.name %}
+
+<article class="hero-carousel__slide relative block h-full min-h-[520px] basis-full shrink-0 md:min-h-[620px]" data-hero-carousel-slide aria-hidden="false" {{ block.shopify_attributes }}>
+  {% if mobile_image != blank or desktop_image != blank %}
+    <picture class="absolute inset-0 block h-full w-full">
+      {% if desktop_image != blank and desktop_image != mobile_image %}
+        <source media="(min-width: 768px)" srcset="{{ desktop_image | escape_attr }}">
+      {% endif %}
+      <img
+        class="h-full w-full select-none object-cover"
+        src="{{ mobile_image | escape_attr }}"
+        alt="{{ image_alt | escape_attr }}"
+        draggable="false"
+        loading="lazy"
+        decoding="async"
+      >
+    </picture>
+  {% else %}
+    <div class="tiendu-carousel__hero-media--empty absolute inset-0" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="tiendu-carousel__hero-overlay absolute inset-0"></div>
+
+  {% if block.blocks and block.blocks.size > 0 %}
+    <div class="absolute inset-0 z-[1] w-full">
+      <div class="container flex h-full items-end">
+        <div class="tiendu-hero-content-wrap flex w-full px-0 pb-20 text-white md:pb-24 max-md:px-6 max-md:pb-16">
+          <div class="tiendu-carousel__hero-content tiendu-hero-content">
+            {% content_for 'blocks' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</article>
+
+{% schema %}
+{
+  "name": "Slide",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "image",
+      "id": "desktop_image",
+      "label": "Imagen horizontal"
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": "Imagen vertical"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Alt de imagen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    }
+  ]
+}
+{% endschema %}

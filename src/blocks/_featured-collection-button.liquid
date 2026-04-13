@@ -1,0 +1,66 @@
+{% assign collection = section.settings.collection %}
+{% assign url_source = block.settings.url_source | default: 'collection_url' %}
+{% assign resolved_url = '' %}
+
+{% if url_source == 'collection_url' and collection and collection.url != blank %}
+  {% assign resolved_url = collection.url %}
+{% elsif block.settings.custom_url != blank %}
+  {% assign resolved_url = block.settings.custom_url %}
+{% endif %}
+
+{% if resolved_url != blank %}
+  <a
+    href="{{ resolved_url | escape_attr }}"
+    class="tiendu-dynamic-button tiendu-dynamic-button--{{ block.settings.style | default: 'button' }}{% if block.settings.style == 'button' %} tiendu-block-button inline-flex items-center justify-center bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90 radius-button{% else %} inline-flex items-center text-sm font-semibold text-[var(--color-primary)] no-underline transition hover:opacity-80{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.label | default: 'Ver mas' | escape }}
+  </a>
+{% else %}
+  <span
+    class="tiendu-dynamic-button tiendu-dynamic-button--disabled tiendu-dynamic-button--{{ block.settings.style | default: 'button' }}{% if block.settings.style == 'button' %} tiendu-block-button inline-flex items-center justify-center bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm radius-button{% else %} inline-flex items-center text-sm font-semibold text-[var(--color-primary)] no-underline{% endif %}"
+    aria-disabled="true"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.label | default: 'Ver mas' | escape }}
+  </span>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Boton de coleccion",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Etiqueta",
+      "default": "Ver mas"
+    },
+    {
+      "type": "select",
+      "id": "url_source",
+      "label": "Fuente del enlace",
+      "options": [
+        { "value": "collection_url", "label": "URL de coleccion" },
+        { "value": "custom_url", "label": "URL personalizada" }
+      ],
+      "default": "collection_url"
+    },
+    {
+      "type": "url",
+      "id": "custom_url",
+      "label": "URL personalizada"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Estilo",
+      "options": [
+        { "value": "button", "label": "Boton" },
+        { "value": "link", "label": "Link" }
+      ],
+      "default": "button"
+    }
+  ]
+}
+{% endschema %}

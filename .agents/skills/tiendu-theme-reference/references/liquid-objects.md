@@ -135,6 +135,13 @@ content_for_layout: string;
 content_for_header: string;
 ```
 
+Editor / preview helpers:
+
+```ts
+design_mode: boolean;
+preview_mode: boolean;
+```
+
 Section and block rendering helper:
 
 ```ts
@@ -146,6 +153,14 @@ Use it through:
 ```liquid
 {% content_for 'blocks' %}
 ```
+
+The platform also supports explicitly rendering a single block instance with:
+
+```liquid
+{% content_for 'block', id: 'block-id', type: 'block-type' %}
+```
+
+Use that only when a block truly needs fixed placement. Prefer normal preset-created blocks rendered through `{% content_for 'blocks' %}` when merchants should be able to add, remove, reorder, and edit them freely.
 
 ## Section context
 
@@ -183,6 +198,7 @@ Pragmatic notes:
 
 - Section settings are merged with schema defaults before rendering.
 - Block settings are also merged with schema defaults.
+- Blocks render in section context, so they can read `section.settings.*`.
 - `block.editor_attributes` is for the theme editor wrapper. Preserve it when a block root element already uses it.
 - `block.shopify_attributes` is an alias exposed for Shopify-style block files and should usually be preferred in `src/blocks/*.liquid`.
 - Nested block instances are available recursively on `block.blocks`.
@@ -204,6 +220,10 @@ These rules matter because setting-selected objects do not always behave like ro
   resolve handles to article objects or ordered article arrays
 - `url`:
   resolves to a storefront-safe URL string before render
+
+Pragmatic consequence:
+
+- a block rendered inside a section can safely read resolved values like `section.settings.collection.name`, `section.settings.collection.url`, or `section.settings.product.title`
 
 ## Route-level variables
 

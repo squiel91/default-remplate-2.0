@@ -1,7 +1,7 @@
 <section class="main-search py-12 md:py-16">
   <div class="container">
     <h1 class="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">{{ section.settings.title }}</h1>
-    <button type="button" class="search-form mt-6 flex w-full items-center gap-3 rounded-full border border-slate-300 bg-white px-5 py-3 text-left text-base transition hover:border-slate-400" data-header-search-trigger{% if search.terms != blank %} data-header-search-query="{{ search.terms | escape_attr }}"{% endif %}>
+    <button type="button" class="search-form radius-button mt-6 flex w-full items-center gap-3 border border-slate-300 bg-white px-5 py-3 text-left text-base transition hover:border-slate-400" data-header-search-trigger{% if search.terms != blank %} data-header-search-query="{{ search.terms | escape_attr }}"{% endif %}>
       <span class="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center text-slate-400">
         {% render 'icon-search', size: 18 %}
       </span>

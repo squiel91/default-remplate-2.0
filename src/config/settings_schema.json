@@ -44,5 +44,38 @@
         "default": "roboto_n4"
       }
     ]
+  },
+  {
+    "name": "Estilo",
+    "settings": [
+      {
+        "type": "select",
+        "id": "theme_rounding",
+        "label": "Redondeado",
+        "options": [
+          {
+            "value": "ninguno",
+            "label": "Ninguno"
+          },
+          {
+            "value": "pequeno",
+            "label": "Pequeno"
+          },
+          {
+            "value": "mediano",
+            "label": "Mediano"
+          },
+          {
+            "value": "grande",
+            "label": "Grande"
+          },
+          {
+            "value": "extra_grande",
+            "label": "Extra grande"
+          }
+        ],
+        "default": "mediano"
+      }
+    ]
   }
 ]

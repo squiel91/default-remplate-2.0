@@ -1,25 +1,33 @@
 {% assign featured_collection = section.settings.collection %}
-<section class="featured-category py-12 md:py-16">
-  {% if featured_collection and featured_collection.id %}
-    <div class="flex items-center justify-between gap-4 px-4 md:px-6">
-      {% if section.settings.title != blank %}
-        <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ section.settings.title | escape }}</h2>
-      {% else %}
-        <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ featured_collection.name | escape }}</h2>
+{% if featured_collection and featured_collection.id %}
+  <section class="featured-category product-list-section py-12 md:py-16">
+    <div class="container">
+      {% if section.blocks and section.blocks.size > 0 %}
+        <div class="product-list-section__intro">
+          {% content_for 'blocks' %}
+        </div>
       {% endif %}
 
-      <a href="{{ featured_collection.url }}" class="inline-flex shrink-0 items-center text-sm font-semibold text-[var(--color-primary)] no-underline transition hover:opacity-80">Ver mas</a>
+      {% paginate featured_collection.products by section.settings.limit %}
+        {% render 'product-listing-grid', products: featured_collection.products, no_padding: true, breadcrumb_url: featured_collection.url, breadcrumb_title: featured_collection.name %}
+      {% endpaginate %}
     </div>
+  </section>
+{% elsif design_mode or preview_mode %}
+  <section class="featured-category product-list-section py-12 md:py-16">
+    <div class="container">
+      {% if section.blocks and section.blocks.size > 0 %}
+        <div class="product-list-section__intro">
+          {% content_for 'blocks' %}
+        </div>
+      {% endif %}
 
-    {% paginate featured_collection.products by section.settings.limit %}
-      {% render 'product-listing-grid', products: featured_collection.products %}
-    {% endpaginate %}
-  {% else %}
-    <div class="px-4 text-center text-[var(--color-text-light)] md:px-6">
-      Selecciona una coleccion para mostrar esta seccion.
+      <div class="product-list-section__empty">
+        Selecciona una coleccion para mostrar esta seccion.
+      </div>
     </div>
-  {% endif %}
-</section>
+  </section>
+{% endif %}
 
 {% schema %}
 {
@@ -27,6 +35,7 @@
   "disabled_on": {
     "groups": ["header", "footer"]
   },
+  "max_blocks": 4,
   "settings": [
     {
       "type": "collection",
@@ -35,15 +44,57 @@
       "default": "alimentos"
     },
     {
-      "type": "text",
-      "id": "title",
-      "label": "Titulo"
-    },
-    {
       "type": "number",
       "id": "limit",
       "label": "Cantidad a mostrar",
       "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "layout-group"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coleccion destacada",
+      "settings": {
+        "collection": "",
+        "limit": 4
+      },
+      "blocks": {
+        "group": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "row",
+            "direction_desktop": "row",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "space-between",
+            "justify_desktop": "space-between"
+          },
+          "blocks": {
+            "title": {
+              "type": "_featured-collection-title",
+              "settings": {
+                "source": "collection_name",
+                "tag": "h2",
+                "size": "medium"
+              }
+            },
+            "button": {
+              "type": "_featured-collection-button",
+              "settings": {
+                "label": "Ver mas",
+                "url_source": "collection_url",
+                "style": "button"
+              }
+            }
+          },
+          "block_order": ["title", "button"]
+        }
+      },
+      "block_order": ["group"]
     }
   ]
 }

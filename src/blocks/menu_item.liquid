@@ -1,0 +1,44 @@
+{% assign label = block.settings.title | default: 'Link' %}
+{% assign open_new_page = block.settings.open_in_new_page %}
+
+{% if block.settings.url != blank %}
+  <a
+    href="{{ block.settings.url | escape_attr }}"
+    class="tiendu-menu-item"
+    {% if open_new_page %}
+      target="_blank"
+      rel="noopener noreferrer"
+    {% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {{ label | escape }}
+  </a>
+{% elsif design_mode or preview_mode %}
+  <span class="tiendu-menu-item tiendu-menu-item--placeholder" {{ block.shopify_attributes }}>{{ label | escape }}</span>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Link del menu",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Link"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Destino"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_page",
+      "label": "Abrir en una nueva pagina",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

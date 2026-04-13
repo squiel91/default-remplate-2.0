@@ -1,12 +1,59 @@
-<section class="hero-banner bg-slate-50 py-16 text-center md:py-24">
-  <div class="container mx-auto max-w-3xl">
-    <h1 class="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">{{ section.settings.heading }}</h1>
-    {% if section.settings.subheading != blank %}
-      <p class="hero-banner__sub mt-4 text-lg leading-8 text-[var(--color-text-light)]">{{ section.settings.subheading }}</p>
+{% assign mobile_image = section.settings.mobile_image | default: section.settings.desktop_image %}
+{% assign desktop_image = section.settings.desktop_image | default: section.settings.mobile_image %}
+{% assign image_alt = section.settings.image_alt | default: store.name %}
+{% assign has_media = false %}
+
+{% if mobile_image != blank or desktop_image != blank %}
+  {% assign has_media = true %}
+{% endif %}
+
+<section class="hero-banner">
+  <div
+    class="hero-banner__frame hero-banner__frame--{{ section.settings.horizontal_alignment | default: 'left' }} relative overflow-hidden{% if has_media %} hero-banner__frame--media text-white{% else %} hero-banner__frame--plain text-slate-950{% endif %}"
+    style="--hero-banner-background: {{ section.settings.background_color | default: '#f8fafc' }};"
+  >
+    {% if has_media %}
+      <picture class="absolute inset-0 block h-full w-full">
+        {% if desktop_image != blank and desktop_image != mobile_image %}
+          <source media="(min-width: 768px)" srcset="{{ desktop_image | escape_attr }}">
+        {% endif %}
+        <img
+          class="hero-banner__media h-full w-full object-cover"
+          src="{{ mobile_image | escape_attr }}"
+          alt="{{ image_alt | escape_attr }}"
+          loading="lazy"
+          decoding="async"
+        >
+      </picture>
+      <div class="hero-banner__overlay absolute inset-0"></div>
     {% endif %}
-    {% if section.settings.cta_text != blank %}
-      <a href="{{ section.settings.cta_url }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90">{{ section.settings.cta_text }}</a>
-    {% endif %}
+
+    <div class="hero-banner__inner relative z-[1]">
+      <div class="container">
+        <div class="tiendu-hero-content-wrap flex w-full">
+          <div class="tiendu-hero-content">
+            {% if section.blocks and section.blocks.size > 0 %}
+              {% content_for 'blocks' %}
+            {% elsif section.settings.heading != blank or section.settings.subheading != blank or section.settings.cta_text != blank %}
+              {% if section.settings.heading != blank %}
+                <h1 class="tiendu-block-heading tiendu-block-heading--large text-4xl md:text-5xl mb-4 font-semibold tracking-tight">{{ section.settings.heading }}</h1>
+              {% endif %}
+
+              {% if section.settings.subheading != blank %}
+                <div class="tiendu-block-text rte mb-6 text-lg leading-8"><p>{{ section.settings.subheading }}</p></div>
+              {% endif %}
+
+              {% if section.settings.cta_text != blank %}
+                <a href="{{ section.settings.cta_url }}" class="tiendu-block-button inline-flex items-center justify-center bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white no-underline shadow-sm transition hover:opacity-90 radius-button">{{ section.settings.cta_text }}</a>
+              {% endif %}
+            {% else %}
+              <h2 class="tiendu-block-heading tiendu-block-heading--large text-4xl md:text-5xl mb-4 font-semibold tracking-tight">Banner principal</h2>
+              <div class="tiendu-block-text rte mb-6 text-lg leading-8"><p>Agrega bloques de titulo, texto y boton para construir este hero desde el editor.</p></div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -16,30 +63,50 @@
   "disabled_on": {
     "groups": ["header", "footer"]
   },
+  "max_blocks": 6,
   "settings": [
     {
-      "type": "text",
-      "id": "heading",
-      "label": "Titulo",
-      "default": "Bienvenido a nuestra tienda"
+      "type": "image",
+      "id": "desktop_image",
+      "label": "Imagen horizontal"
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": "Imagen vertical"
     },
     {
       "type": "text",
-      "id": "subheading",
-      "label": "Subtitulo",
-      "default": "Explora nuestra seleccion de productos"
+      "id": "image_alt",
+      "label": "Alt de imagen"
     },
     {
-      "type": "text",
-      "id": "cta_text",
-      "label": "Texto del boton",
-      "default": "Ver productos"
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#f8fafc"
     },
     {
-      "type": "url",
-      "id": "cta_url",
-      "label": "URL del boton",
-      "default": "/categorias"
+      "type": "select",
+      "id": "horizontal_alignment",
+      "label": "Alineacion horizontal",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "left"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
     }
   ]
 }

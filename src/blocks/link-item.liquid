@@ -1,0 +1,45 @@
+{% assign label = block.settings.text | default: '[ENLACE]' %}
+{% assign open_new_page = block.settings.open_in_new_page %}
+
+<li class="tiendu-link-list__item" {{ block.shopify_attributes }}>
+  {% if block.settings.url != blank %}
+    <a
+      href="{{ block.settings.url | escape_attr }}"
+      class="tiendu-link-list__link"
+      {% if open_new_page %}
+        target="_blank"
+        rel="noopener noreferrer"
+      {% endif %}
+    >
+      {{ label | escape }}
+    </a>
+  {% else %}
+    <span class="tiendu-link-list__link tiendu-link-list__link--placeholder">{{ label | escape }}</span>
+  {% endif %}
+</li>
+
+{% schema %}
+{
+  "name": "Enlace",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Texto",
+      "default": "[ENLACE]"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Enlace"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_page",
+      "label": "Abrir en una nueva pagina",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

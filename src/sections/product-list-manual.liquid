@@ -1,36 +1,31 @@
-<section class="product-list-manual py-12 md:py-16">
-  <div class="px-4 md:px-6">
-    {% if section.settings.title != blank %}
-      <h2 class="text-2xl font-semibold tracking-tight text-slate-950">{{ section.settings.title | escape }}</h2>
-    {% endif %}
+{% assign selected_products = section.settings.products %}
+{% if selected_products and selected_products.size > 0 %}
+  <section class="product-list-manual product-list-section py-12 md:py-16">
+    <div class="container">
+      {% if section.blocks and section.blocks.size > 0 %}
+        <div class="product-list-section__intro">
+          {% content_for 'blocks' %}
+        </div>
+      {% endif %}
 
-    {% assign selected_products = section.settings.products %}
-    {% if selected_products and selected_products.size > 0 %}
-      <div class="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        {% for product in selected_products %}
-          <a href="{{ product.url }}" class="block bg-white no-underline text-slate-950 transition hover:opacity-80">
-            {% if product.coverImage and product.coverImage.url %}
-              <img
-                class="aspect-square w-full bg-slate-100 object-cover"
-                src="{{ product.coverImage.url }}"
-                alt="{{ product.coverImage.alt | default: product.title }}"
-                loading="lazy"
-              >
-            {% else %}
-              <div class="aspect-square w-full bg-slate-100"></div>
-            {% endif %}
+      {% render 'product-listing-grid', products: selected_products, no_padding: true %}
+    </div>
+  </section>
+{% elsif design_mode or preview_mode %}
+  <section class="product-list-manual product-list-section py-12 md:py-16">
+    <div class="container">
+      {% if section.blocks and section.blocks.size > 0 %}
+        <div class="product-list-section__intro">
+          {% content_for 'blocks' %}
+        </div>
+      {% endif %}
 
-            <p class="mt-2 text-sm font-medium">{{ product.title | escape }}</p>
-          </a>
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="mt-6 text-sm text-slate-500">
+      <div class="product-list-section__empty mt-6">
         Selecciona productos para mostrar esta seccion.
       </div>
-    {% endif %}
-  </div>
-</section>
+    </div>
+  </section>
+{% endif %}
 
 {% schema %}
 {
@@ -38,18 +33,51 @@
   "disabled_on": {
     "groups": ["header", "footer"]
   },
+  "max_blocks": 4,
   "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Titulo",
-      "default": "Productos elegidos"
-    },
     {
       "type": "product_list",
       "id": "products",
       "label": "Productos",
       "limit": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "layout-group"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lista manual de productos",
+      "settings": {
+        "products": []
+      },
+      "blocks": {
+        "group": {
+          "type": "layout-group",
+          "settings": {
+            "direction_mobile": "column",
+            "direction_tablet": "row",
+            "direction_desktop": "row",
+            "justify_mobile": "flex-start",
+            "justify_tablet": "space-between",
+            "justify_desktop": "space-between"
+          },
+          "blocks": {
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Productos elegidos",
+                "tag": "h2",
+                "size": "medium"
+              }
+            }
+          },
+          "block_order": ["title"]
+        }
+      },
+      "block_order": ["group"]
     }
   ]
 }
